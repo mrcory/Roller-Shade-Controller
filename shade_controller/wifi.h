@@ -27,5 +27,3 @@ BLYNK_WRITE(V13) {
 BLYNK_WRITE(V20) {
   motorPos = param.asInt();
 }
-
-

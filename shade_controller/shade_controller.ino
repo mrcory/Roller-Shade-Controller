@@ -24,12 +24,11 @@ AccelStepper stepper(HALFSTEP, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
 long int stepPosition = 0;
 int connectAttempt = 0;
 long int posNow = 0;
-long int moveTarget = 0;
-bool moving = false;
+bool moving = false; //Flag
 bool myReset = false;
-bool setHome = false;
+bool setHome = false; //Flag
 long int savedPosition = 100;
-
+long int moveTarget;
 bool moveUp = false;
 
 #include "functions.h"
@@ -66,7 +65,6 @@ void setup() {
 
   stepper.setMaxSpeed(1060.0);
   stepper.setAcceleration(212.0);
-  //stepper.setSpeed(600);
 
   stepper.setCurrentPosition(savedPosition);
 
@@ -91,12 +89,13 @@ void loop() {
 }
 
 
-
+//We will conigure Blynk with this
 void blynkConfig (){
   Blynk.config(auth,server,port);
   Blynk.connectWiFi(ssid,pass);
 }
 
+//This will connect or run blynk
 void blynkRun() {
   if (Blynk.connected() == true) {
     Blynk.run();
@@ -128,17 +127,13 @@ void motorOff() {
 }
 
 void moveNow() {
-  
-  if (posNow != moveTarget) {
-    stepper.moveTo(moveTarget);
-    moving = true;
-  }
 
+  //If motor has reached it's target location, run this
   if (stepper.distanceToGo() == 0) {
-    //posNow = moveTarget;
-    moving = false;
     motorOff();   
 
+    //After movement is complete, write the current position to flash
+    //This will preserve the position of the motor through power loss
     if (savedPosition != stepper.currentPosition()) {
       savedPosition = stepper.currentPosition();
       configSave();
@@ -146,6 +141,7 @@ void moveNow() {
     }
   }
 
+  //Blynk will set a vale to motorPos that is used to set where the motor should run to
   if (motorPos > 0) {
     if (motorPos == 1) {stepper.moveTo(shade[0]);}
     if (motorPos == 2) {stepper.moveTo(shade[1]);}
@@ -159,13 +155,13 @@ void moveNow() {
 }
 
 
+//Function used to control the motor position via Serial
 void manualMove(int arg_cnt, char **args) {
   stepper.moveTo(cmdStr2Num(args[1], 10));
   Serial.print("Manual Move: "); Serial.println(cmdStr2Num(args[1], 10));
 }
 
+//Set home position via Serial
 void homePos(int arg_cnt, char **args) {
   stepper.setCurrentPosition(0);
 }
-
-
