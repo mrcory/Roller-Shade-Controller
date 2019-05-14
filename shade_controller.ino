@@ -5,6 +5,8 @@
  * Designed for use with my 3D printed roller shade. (Not yet published)
  */
 
+//version 1.0
+
 #include <AccelStepper.h>
 #include <EEPROM.h>
 
