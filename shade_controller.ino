@@ -2,7 +2,7 @@
  * Created by: Cory McGahee
  * Free for non-commercial use only
  * 
- * Designed for use with 3D printed roller shade.
+ * Designed for use with my 3D printed roller shade. (Not yet published)
  */
 
 #include <AccelStepper.h>
