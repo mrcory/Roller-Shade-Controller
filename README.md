@@ -1,0 +1,32 @@
+# Roller-Shade-Controller
+NodeMCU powered roller shade controller for my 3D printed roller shade.
+
+## Welcome to my little project!
+The purpose behind this project was two-fold. One, I want a remote controlled shade for my window, but didn't want to spend that much. Two, I wanted a small project to do to break the tedium of my working on my aquarium controller.
+
+I have succeeded in both of those goals. (If I do say so myself.) I managed to build the majority of the hardware for the shade for under $20 unit cost estimated. (I did luck out on cheap motors) and Unfortunately, this does not include beautification. Function on the other hand has been a success. (Who says you need form with function.)
+
+More features, like physical button control, will add a little bit to the cost but aren't strictly necessary.
+
+## Project Info
+
+### Hardware
+ Motion is driven by a 28BYJ-48 with a ULN2003.
+
+ Currently controlled by a Lolin NodeMCU v3, but it will be replaced by a Wemos D1 Mini
+
+ A donor roller shade.
+
+ 1/2" EMT conduit.
+
+### Software
+Blynk is used as a remote control for this project.
+
+[AccelStepper (Fork)](https://github.com/waspinator/AccelStepper) is used to actually drive the motor. _(This version is available in the library manager.)_
+
+[CmdArduino](https://github.com/fakufaku/CmdArduino) is used for control of serial monitor. (A little library I really like.)
+
+### Goal
+The goal is to make a low cost remote controlled roller shade that can be made DIY. The only tools needed are some hex wrenches, a hacksaw (band saw is also acceptable), and a 3D printer.
+
+More tools may be required to make the final product look nice, but that is _optional_.
