@@ -18,17 +18,16 @@
 #include <Cmd.h>
 #include "config.h"
 
-
+//Configure AccelStepper
 AccelStepper stepper(HALFSTEP, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
 
 long int stepPosition = 0;
 int connectAttempt = 0;
 long int posNow = 0;
 bool moving = false; //Flag
-bool myReset = false;
+bool myReset = false; //Flag
 bool setHome = false; //Flag
 long int savedPosition = 100;
-long int moveTarget;
 bool moveUp = false;
 
 #include "functions.h"
@@ -70,7 +69,7 @@ void setup() {
 
   motorOff();
 
-  Serial.print("Loaded | Position S|C : "); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
+  Serial.print(F("Loaded | Position S|C : ")); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
 }
 
 
@@ -104,9 +103,9 @@ void blynkRun() {
     }
   } else {
     if (connectAttempt < connectTimeout) {
-      Serial.print("[BLYNK] Attempting to connect... | Attempt #"); Serial.println(connectAttempt);
+      Serial.print(F("[BLYNK] Attempting to connect... | Attempt #")); Serial.println(connectAttempt);
       Blynk.connect(3000); //Attempt to connect for 3 seconds.
-      if (Blynk.connected() == true) {Serial.println("[BLYNK] Connected!");}
+      if (Blynk.connected() == true) {Serial.println(F("[BLYNK] Connected!"));}
       connectAttempt++; //Increment timeout timer
     }
   }
@@ -117,7 +116,7 @@ void blynkRun() {
 }
 
 
-
+//Write motor pins low to be sure the motor is unpowered
 void motorOff() {
   digitalWrite(mtrPin1,LOW);
   digitalWrite(mtrPin2,LOW);
@@ -125,6 +124,7 @@ void motorOff() {
   digitalWrite(mtrPin4,LOW);
   
 }
+
 
 void moveNow() {
 
@@ -137,7 +137,7 @@ void moveNow() {
     if (savedPosition != stepper.currentPosition()) {
       savedPosition = stepper.currentPosition();
       configSave();
-      Serial.print("Position S|C : "); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
+      Serial.print(F("Position S|C : ")); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
     }
   }
 
@@ -148,7 +148,7 @@ void moveNow() {
     if (motorPos == 3) {stepper.moveTo(shade[2]);}
     if (motorPos == 4) {stepper.moveTo(shade[3]);}
     if (motorPos == 5) {stepper.moveTo(shade[4]);}
-    Serial.println("Blynk Move");
+    Serial.println(F("Blynk Move"));
   motorPos = 0;
   }
    
@@ -158,7 +158,7 @@ void moveNow() {
 //Function used to control the motor position via Serial
 void manualMove(int arg_cnt, char **args) {
   stepper.moveTo(cmdStr2Num(args[1], 10));
-  Serial.print("Manual Move: "); Serial.println(cmdStr2Num(args[1], 10));
+  Serial.print(F("Manual Move: ")); Serial.println(cmdStr2Num(args[1], 10));
 }
 
 //Set home position via Serial

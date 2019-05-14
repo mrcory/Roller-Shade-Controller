@@ -3,12 +3,6 @@
 
 void sendBlynk() { //Blynk Feedback
   Blynk.virtualWrite(V1,stepper.currentPosition());
-  Blynk.virtualWrite(V2,moveTarget);
-}
-
-
-BLYNK_WRITE(V10) {
-  moveTarget = param.asInt();
 }
 
 BLYNK_WRITE(V11) {
