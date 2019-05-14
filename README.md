@@ -30,3 +30,6 @@ Blynk is used as a remote control for this project.
 The goal is to make a low cost remote controlled roller shade that can be made DIY. The only tools needed are some hex wrenches, a hacksaw (band saw is also acceptable), and a 3D printer.
 
 More tools may be required to make the final product look nice, but that is _optional_.
+
+##Known Issues
+ Due to the way that the stepper is driven Blynk will disconnect when the shade is traveling. This is because Blynk slows the code execution. I believe this is happening due to the time it takes for Blynk to communicate with the server to check for any updates. To make the stepper run smoothly Blynk.run() is not run while the stepper is active by putting it behind an if check.
