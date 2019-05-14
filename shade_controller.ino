@@ -19,13 +19,6 @@
 #include "config.h"
 
 
-const int stepPerRev = 4096;
-//Stepper stepper (stepPerRev,D1,D2,D3,D4); //Declare motor pins
-#define mtrPin1 D5
-#define mtrPin2 D7
-#define mtrPin3 D6
-#define mtrPin4 D8
-
 AccelStepper stepper(HALFSTEP, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
 
 long int stepPosition = 0;
