@@ -17,12 +17,5 @@ void configLoad() {
   int i=5;
   EEPROM.get(5,savedPosition);
   Serial.println("Config Loaded");
-  
-  if (EEPROM.read(399) == 1) {
-    EEPROM.get(400,token);
-    Serial.print("Token: ");
-    Serial.println(token);
-  }
-
 Serial.println(savedPosition);
 }
