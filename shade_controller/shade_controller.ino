@@ -20,58 +20,12 @@
 #include <Cmd.h>
 #include "config.h"
 
+
+
 byte lastPosition = 2;
 
 //Configure AccelStepper
 AccelStepper stepper(HALFSTEP, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
-
-#if buttonEnable
-
-  #include <AnalogButtons.h>
-
-  void upClick() {
-    Serial.println("Up Click");
-    if (lastPosition > 1) {
-      lastPosition--;
-      motorPos = lastPosition;
-      Serial.println(motorPos);
-    }
-  }
-
-  void upHold() {
-    Serial.println("Up Hold");
-    motorPos = 1;
-    lastPosition = 1;
-  }
-
-  void downClick() {
-    Serial.println("Dn Click");
-    if (lastPosition < 4) {
-      lastPosition++;
-      motorPos = lastPosition;
-      Serial.println(motorPos);
-    }
-  }
-
-  void downHold() {
-    Serial.println("Dn Hold");
-    motorPos = 4;
-    lastPosition = 4;
-  }
-
-  void resetClick() {
-    Serial.println("Rst Click");
-    stepper.setCurrentPosition(0);
-  }
-
-  AnalogButtons buttons(buttonPin, INPUT);
-  Button up = Button(upVal, &upClick, &upHold, 1000, 5000);
-  Button down = Button(dnVal, &downClick, &downHold, 1000, 5000);
-  Button rst = Button(rsVal, &resetClick);
-
-  #define ANALOGBUTTONS_SAMPLING_INTERVAL tickVal
-  
-#endif 
 
 
 
@@ -84,9 +38,66 @@ bool setHome = false; //Flag
 long int savedPosition = 100;
 bool moveUp = false;
 
+unsigned long ledTimer;
+bool ledOn = false;
+byte ledMode = 0;
 
 #include "functions.h"
 #include "wifi.h"
+
+
+#if buttonEnable
+
+  #include <AnalogButtons.h>
+
+  void upClick() {
+    Serial.println("Up Click");
+    if (lastPosition > 1) {
+      lastPosition--;
+      motorPos = lastPosition;
+      Serial.println(motorPos);
+      ledTurn(0);
+    }
+  }
+
+  void upHold() {
+    Serial.println("Up Hold");
+    motorPos = 1;
+    lastPosition = 1;
+    ledTurn(1);
+  }
+
+  void downClick() {
+    Serial.println("Dn Click");
+    if (lastPosition < 4) {
+      lastPosition++;
+      motorPos = lastPosition;
+      Serial.println(motorPos);
+      ledTurn(0);
+    }
+  }
+
+  void downHold() {
+    Serial.println("Dn Hold");
+    motorPos = 4;
+    lastPosition = 4;
+    ledTurn(1);
+  }
+
+  void resetClick() {
+    Serial.println("Rst Click");
+    stepper.setCurrentPosition(0);
+    ledTurn(0);
+  }
+
+  AnalogButtons buttons(buttonPin, INPUT);
+  Button up = Button(upVal, &upClick, &upHold, 1000, 5000);
+  Button down = Button(dnVal, &downClick, &downHold, 1000, 5000);
+  Button rst = Button(rsVal, &resetClick);
+
+  #define ANALOGBUTTONS_SAMPLING_INTERVAL tickVal
+  
+#endif 
 
 //Blynk RTC
 #include <WidgetRTC.h>
@@ -94,6 +105,9 @@ WidgetRTC RTC;
 BlynkTimer timer1;
 
 void setup() {
+
+  pinMode(ledPin,OUTPUT);
+  digitalWrite(ledPin,LOW);
   
   #if buttonEnable
     buttons.add(up);
@@ -138,6 +152,9 @@ void setup() {
 
 
 void loop() {
+  if (ledOn == true) {
+    ledFeedback();
+  }
   cmdPoll();
   #if buttonEnable
     buttons.check(); //Check for button presses
@@ -236,3 +253,7 @@ void manualMove(int arg_cnt, char **args) {
 void homePos(int arg_cnt, char **args) {
   stepper.setCurrentPosition(0);
 }
+
+
+
+

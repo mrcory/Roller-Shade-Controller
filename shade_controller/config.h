@@ -37,3 +37,7 @@ const int stepPerRev = 4096;
 #define rsVal 1024
 
 #define tickVal 20
+
+//Feedback for button presses
+#define ledPin D1
+#define ledBrightness //Not used yet

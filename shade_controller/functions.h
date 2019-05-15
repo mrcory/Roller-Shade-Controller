@@ -26,6 +26,28 @@ Serial.println(savedPosition);
 }
 
 void ledFeedback() {
-  
+
+  if (ledMode == 0) {
+    if (ledTimer > millis() - 250) {
+      digitalWrite(ledPin, HIGH);
+    } else {
+      digitalWrite(ledPin, LOW);
+    }   
+  } 
+
+  if (ledMode == 1) {
+    if (ledTimer > millis() - 1500) {
+      digitalWrite(ledPin, HIGH);
+    } else {
+      digitalWrite(ledPin, LOW);
+    }
+  }
 }
+
+void ledTurn(int _mode) {
+    ledTimer  = millis();
+    ledOn = true;
+    ledMode = _mode;
+}
+
 
