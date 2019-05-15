@@ -86,14 +86,18 @@ byte ledMode = 0;
 
   void resetClick() {
     Serial.println("Rst Click");
+  }
+
+  void resetHold() {
+    Serial.println("Rst Hold");
     stepper.setCurrentPosition(0);
-    ledTurn(0);
+    ledTurn(1);
   }
 
   AnalogButtons buttons(buttonPin, INPUT);
   Button up = Button(upVal, &upClick, &upHold, 1000, 5000);
   Button down = Button(dnVal, &downClick, &downHold, 1000, 5000);
-  Button rst = Button(rsVal, &resetClick);
+  Button rst = Button(rsVal, &resetClick, &resetHold, 1000, 5000);
 
   #define ANALOGBUTTONS_SAMPLING_INTERVAL tickVal
   
