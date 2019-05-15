@@ -5,10 +5,12 @@
  * Designed for use with my 3D printed roller shade. (Not yet published)
  */
 
-//version 1.0
+//version 1.1
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
+
+
 
 #define HALFSTEP 8
 
@@ -18,8 +20,60 @@
 #include <Cmd.h>
 #include "config.h"
 
+byte lastPosition = 2;
+
 //Configure AccelStepper
 AccelStepper stepper(HALFSTEP, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
+
+#if buttonEnable
+
+  #include <AnalogButtons.h>
+
+  void upClick() {
+    Serial.println("Up Click");
+    if (lastPosition > 1) {
+      lastPosition--;
+      motorPos = lastPosition;
+      Serial.println(motorPos);
+    }
+  }
+
+  void upHold() {
+    Serial.println("Up Hold");
+    motorPos = 1;
+    lastPosition = 1;
+  }
+
+  void downClick() {
+    Serial.println("Dn Click");
+    if (lastPosition < 4) {
+      lastPosition++;
+      motorPos = lastPosition;
+      Serial.println(motorPos);
+    }
+  }
+
+  void downHold() {
+    Serial.println("Dn Hold");
+    motorPos = 4;
+    lastPosition = 4;
+  }
+
+  void resetClick() {
+    Serial.println("Rst Click");
+    stepper.setCurrentPosition(0);
+  }
+
+  AnalogButtons buttons(buttonPin, INPUT);
+  Button up = Button(upVal, &upClick, &upHold, 1000, 5000);
+  Button down = Button(dnVal, &downClick, &downHold, 1000, 5000);
+  Button rst = Button(rsVal, &resetClick);
+
+  #define ANALOGBUTTONS_SAMPLING_INTERVAL tickVal
+  
+#endif 
+
+
 
 long int stepPosition = 0;
 int connectAttempt = 0;
@@ -30,6 +84,7 @@ bool setHome = false; //Flag
 long int savedPosition = 100;
 bool moveUp = false;
 
+
 #include "functions.h"
 #include "wifi.h"
 
@@ -39,6 +94,13 @@ WidgetRTC RTC;
 BlynkTimer timer1;
 
 void setup() {
+  
+  #if buttonEnable
+    buttons.add(up);
+    buttons.add(down);
+    buttons.add(rst);
+  #endif
+  
   cmdInit(&Serial);
   cmdAdd("move",manualMove);
   cmdAdd("rst",homePos);
@@ -62,19 +124,25 @@ void setup() {
   RTC.begin();
   setSyncInterval(blynkRtcInterval);
 
-  stepper.setMaxSpeed(1060.0);
+  stepper.setMaxSpeed(1000.0);
   stepper.setAcceleration(212.0);
 
   stepper.setCurrentPosition(savedPosition);
 
   motorOff();
 
+  
+  
   Serial.print(F("Loaded | Position S|C : ")); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
 }
 
 
 void loop() {
   cmdPoll();
+  #if buttonEnable
+    buttons.check(); //Check for button presses
+  #endif
+  
   if (stepper.distanceToGo() == 0) {
     blynkRun(); //Only run blynk when the stepper is not active
 
@@ -85,6 +153,7 @@ void loop() {
   
   stepper.run(); //AccelStepper runs here
   moveNow();
+  //Serial.println(analogRead(A0));
 }
 
 
@@ -149,7 +218,9 @@ void moveNow() {
     if (motorPos == 4) {stepper.moveTo(shade[3]);}
     if (motorPos == 5) {stepper.moveTo(shade[4]);}
     Serial.println(F("Blynk Move"));
-  motorPos = 0;
+
+    lastPosition = motorPos; //Before reseting motorPos, save a copy to lastPosition
+    motorPos = 0; //Reset motorPos
   }
    
 }

@@ -26,3 +26,14 @@ const int stepPerRev = 4096;
 #define mtrPin2 D7
 #define mtrPin3 D6
 #define mtrPin4 D8
+
+//Button Config
+#define buttonEnable true //True to enable button controls
+#define buttonPin A0 //Analog pin for buttons
+
+//AnalogRead values for buttons
+#define upVal 990
+#define dnVal 903
+#define rsVal 1024
+
+#define tickVal 20
