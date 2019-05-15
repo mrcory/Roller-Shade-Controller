@@ -11,6 +11,8 @@ More features, like physical button control, will add a little bit to the cost b
 ## Project Info
 
 ### Hardware
+ [Thingiverse Models](https://www.thingiverse.com/thing:3628982) are now available.
+ 
  Motion is driven by a 28BYJ-48 with a ULN2003.
 
  Currently controlled by a Lolin NodeMCU v3, but it will be replaced by a Wemos D1 Mini
