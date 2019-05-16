@@ -28,7 +28,7 @@ Serial.println(savedPosition);
 void ledFeedback() {
 
   if (ledMode == 0) {
-    if (ledTimer > millis() - 250) {
+    if (ledTimer > millis() - 500) {
       digitalWrite(ledPin, HIGH);
     } else {
       digitalWrite(ledPin, LOW);
@@ -42,6 +42,19 @@ void ledFeedback() {
       digitalWrite(ledPin, LOW);
     }
   }
+
+  if (ledMode == 2) {
+    if (ledTimer > millis() - 1000) {
+      digitalWrite(ledPin, HIGH);
+      if ((millis() > ledTimer + 250) && (millis()  < ledTimer + 750)) {
+        digitalWrite(ledPin, LOW);
+      } else {
+        digitalWrite(ledPin, HIGH);
+      }
+  } else {
+        digitalWrite(ledPin, LOW);
+   }
+}
 }
 
 void ledTurn(int _mode) {

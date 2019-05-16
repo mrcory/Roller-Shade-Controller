@@ -3,6 +3,12 @@
  * Free for non-commercial use only
  * 
  * Designed for use with my 3D printed roller shade. (Not yet published)
+ * 
+ * 
+ * Serial Commands
+ * move <val> | Absolute move in steps
+ * pos  <val> | Move to set positions
+ * rst        | Reset home position to 0
  */
 
 //version 1.1
@@ -57,6 +63,8 @@ byte ledMode = 0;
       motorPos = lastPosition;
       Serial.println(motorPos);
       ledTurn(0);
+    } else {
+      ledTurn(2);
     }
   }
 
@@ -74,6 +82,8 @@ byte ledMode = 0;
       motorPos = lastPosition;
       Serial.println(motorPos);
       ledTurn(0);
+    } else {
+      ledTurn(2);
     }
   }
 
@@ -98,8 +108,6 @@ byte ledMode = 0;
   Button up = Button(upVal, &upClick, &upHold, 1000, 5000);
   Button down = Button(dnVal, &downClick, &downHold, 1000, 5000);
   Button rst = Button(rsVal, &resetClick, &resetHold, 1000, 5000);
-
-  #define ANALOGBUTTONS_SAMPLING_INTERVAL tickVal
   
 #endif 
 
@@ -122,6 +130,7 @@ void setup() {
   cmdInit(&Serial);
   cmdAdd("move",manualMove);
   cmdAdd("rst",homePos);
+  cmdAdd("pos",pos);
 
 
   
@@ -258,6 +267,16 @@ void homePos(int arg_cnt, char **args) {
   stepper.setCurrentPosition(0);
 }
 
+//Move to position via Serial
+void pos(int arg_cnt, char **args) {
+  if (cmdStr2Num(args[1],10) > 0 && cmdStr2Num(args[1],10) < 5) {
+    motorPos = cmdStr2Num(args[1],10);
+    Serial.print("Target Position: "); Serial.println(cmdStr2Num(args[1],10));
+    
+  } else {
+    Serial.println("Invalid Input. (1-4 are valid.)");
+  }
+}
 
 
 
