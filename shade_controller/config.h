@@ -36,7 +36,7 @@ const int stepPerRev = 4096;
 #define dnVal 903
 #define rsVal 1024
 
-#define tickVal 10
+#define ANALOGBUTTONS_SAMPLING_INTERVAL 10
 
 //Feedback for button presses
 #define ledPin D1
