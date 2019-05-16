@@ -3,7 +3,7 @@ int motorPos = 0;
 
 //Set positions 1-4 in steps for stop locations. Scaled is figured for 10 positions between 1 and 4
 //Position:     1   2     3     4   Scaled
-int shade[5] = {0,20500,41000,61500,0};
+long shade[5] = {0,20500,41000,61500,0};
 
 
 int connectTimeout = 100; // How many attempts can we make before giving up on Blynk
