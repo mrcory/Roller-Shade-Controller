@@ -62,4 +62,96 @@ void ledTurn(int _mode) {
     ledMode = _mode;
 }
 
+//We will conigure Blynk with this
+void blynkConfig (){
+  Blynk.config(auth,server,port);
+  Blynk.connectWiFi(ssid,pass);
+}
 
+//This will connect or run blynk
+void blynkRun() {
+  if (Blynk.connected() == true) {
+    Blynk.run();
+    if (connectTimeout != 0) {
+      connectAttempt = 0; //Reset timeout counter if successfully connected
+    }
+  } else {
+    if (connectAttempt < connectTimeout) {
+      Serial.print(F("[BLYNK] Attempting to connect... | Attempt #")); Serial.println(connectAttempt);
+      Blynk.connect(3000); //Attempt to connect for 3 seconds.
+      if (Blynk.connected() == true) {Serial.println(F("[BLYNK] Connected!"));}
+      connectAttempt++; //Increment timeout timer
+    }
+  }
+
+  #if rtcBlynk
+   timer1.run(); //Blynk RTC
+ #endif
+ 
+  sendBlynk();
+  stepPosition = posNow + stepper.distanceToGo();
+}
+
+
+//Write motor pins low to be sure the motor is unpowered
+void motorOff() {
+  digitalWrite(mtrPin1,LOW);
+  digitalWrite(mtrPin2,LOW);
+  digitalWrite(mtrPin3,LOW);
+  digitalWrite(mtrPin4,LOW);
+  
+}
+
+
+void moveNow() {
+
+  //If motor has reached it's target location, run this
+  if (stepper.distanceToGo() == 0) {
+    motorOff();   
+
+    //After movement is complete, write the current position to flash
+    //This will preserve the position of the motor through power loss
+    if (savedPosition != stepper.currentPosition()) {
+      savedPosition = stepper.currentPosition();
+      configSave();
+      Serial.print(F("Position S|C : ")); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
+    }
+  }
+
+  //Blynk will set a vale to motorPos that is used to set where the motor should run to
+  if (motorPos > 0) {
+    if (motorPos == 1) {stepper.moveTo(shade[0]);}
+    if (motorPos == 2) {stepper.moveTo(shade[1]);}
+    if (motorPos == 3) {stepper.moveTo(shade[2]);}
+    if (motorPos == 4) {stepper.moveTo(shade[3]);}
+    if (motorPos == 5) {stepper.moveTo(shade[4]);}
+    Serial.println(F("Blynk Move"));
+
+    lastPosition = motorPos; //Before reseting motorPos, save a copy to lastPosition
+    motorPos = 0; //Reset motorPos
+  }
+   
+}
+
+
+//Function used to control the motor position via Serial
+void manualMove(int arg_cnt, char **args) {
+  stepper.moveTo(cmdStr2Num(args[1], 10));
+  Serial.print(F("Manual Move: ")); Serial.println(cmdStr2Num(args[1], 10));
+}
+
+//Set home position via Serial
+void homePos(int arg_cnt, char **args) {
+  stepper.setCurrentPosition(0);
+}
+
+//Move to position via Serial
+void pos(int arg_cnt, char **args) {
+  if (cmdStr2Num(args[1],10) > 0 && cmdStr2Num(args[1],10) < 5) {
+    motorPos = cmdStr2Num(args[1],10);
+    Serial.print("Target Position: "); Serial.println(cmdStr2Num(args[1],10));
+    
+  } else {
+    Serial.println("Invalid Input. (1-4 are valid.)");
+  }
+}
