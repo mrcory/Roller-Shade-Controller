@@ -44,3 +44,6 @@ const int stepPerRev = 4096;
 //Feedback for button presses
 #define ledPin D1
 #define ledBrightness //Not used yet
+
+//Extra Stuff
+#define rtcBlynk false
