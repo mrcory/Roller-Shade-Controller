@@ -45,7 +45,6 @@ void ledFeedback() {
 
   if (ledMode == 2) {
     if (ledTimer > millis() - 1000) {
-      digitalWrite(ledPin, HIGH);
       if ((millis() > ledTimer + 250) && (millis()  < ledTimer + 750)) {
         digitalWrite(ledPin, LOW);
       } else {
