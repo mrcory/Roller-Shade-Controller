@@ -47,3 +47,4 @@ const int stepPerRev = 4096;
 
 //Extra Stuff
 #define rtcBlynk false
+#define cmds true //After setting up positions, cmdArduino can be disabled

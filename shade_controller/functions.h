@@ -133,25 +133,27 @@ void moveNow() {
    
 }
 
-
-//Function used to control the motor position via Serial
-void manualMove(int arg_cnt, char **args) {
-  stepper.moveTo(cmdStr2Num(args[1], 10));
-  Serial.print(F("Manual Move: ")); Serial.println(cmdStr2Num(args[1], 10));
-}
-
-//Set home position via Serial
-void homePos(int arg_cnt, char **args) {
-  stepper.setCurrentPosition(0);
-}
-
-//Move to position via Serial
-void pos(int arg_cnt, char **args) {
-  if (cmdStr2Num(args[1],10) > 0 && cmdStr2Num(args[1],10) < 5) {
-    motorPos = cmdStr2Num(args[1],10);
-    Serial.print("Target Position: "); Serial.println(cmdStr2Num(args[1],10));
-    
-  } else {
-    Serial.println("Invalid Input. (1-4 are valid.)");
+//Commands for controlling over Serial Monitor
+#if cmds
+  //Function used to control the motor position via Serial
+  void manualMove(int arg_cnt, char **args) {
+    stepper.moveTo(cmdStr2Num(args[1], 10));
+    Serial.print(F("Manual Move: ")); Serial.println(cmdStr2Num(args[1], 10));
   }
-}
+  
+  //Set home position via Serial
+  void homePos(int arg_cnt, char **args) {
+    stepper.setCurrentPosition(0);
+  }
+  
+  //Move to position via Serial
+  void pos(int arg_cnt, char **args) {
+    if (cmdStr2Num(args[1],10) > 0 && cmdStr2Num(args[1],10) < 5) {
+      motorPos = cmdStr2Num(args[1],10);
+      Serial.print("Target Position: "); Serial.println(cmdStr2Num(args[1],10));
+      
+    } else {
+      Serial.println("Invalid Input. (1-4 are valid.)");
+    }
+  }
+#endif

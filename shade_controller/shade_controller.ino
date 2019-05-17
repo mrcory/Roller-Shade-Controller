@@ -23,8 +23,11 @@
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 #include <Ethernet.h>
-#include <Cmd.h>
 #include "config.h"
+
+#if cmds
+  #include <Cmd.h>
+#endif
 
 
 
@@ -129,11 +132,13 @@ void setup() {
     buttons.add(down);
     buttons.add(rst);
   #endif
-  
-  cmdInit(&Serial);
-  cmdAdd("move",manualMove);
-  cmdAdd("rst",homePos);
-  cmdAdd("pos",pos);
+
+  #if cmds
+    cmdInit(&Serial);
+    cmdAdd("move",manualMove);
+    cmdAdd("rst",homePos);
+    cmdAdd("pos",pos);
+  #endif
 
 
   
@@ -173,8 +178,10 @@ void loop() {
   if (ledOn == true) {
     ledFeedback();
   }
-  
-  cmdPoll();
+
+  #if cmds
+    cmdPoll();
+  #endif
   
   #if buttonEnable
     buttons.check(); //Check for button presses
