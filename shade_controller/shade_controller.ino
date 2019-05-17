@@ -151,8 +151,8 @@ void setup() {
   RTC.begin();
   setSyncInterval(blynkRtcInterval);
 
-  stepper.setMaxSpeed(1000.0);
-  stepper.setAcceleration(212.0);
+  stepper.setMaxSpeed(stepperSpeed);
+  stepper.setAcceleration(stepperAccel);
 
   stepper.setCurrentPosition(savedPosition);
 

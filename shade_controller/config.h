@@ -5,16 +5,19 @@ int motorPos = 0;
 //Position:     1   2     3     4   Scaled
 long shade[5] = {0,20500,41000,61500,0};
 
+//Speed Settings in Steps/Second
+#define stepperSpeed 1000.0 //Max Speed
+#define stepperAccel 212.0  //Acceleration Rate
 
 int connectTimeout = 100; // How many attempts can we make before giving up on Blynk
 int blynkRtcInterval = 30; //How often to sync the time
 
 #include "blynk.h" //Contains Blynk login
 
+//Comment the below line to disable Blynk Serail feedback
 #define BLYNK_PRINT Serial
 
 //------Timer
-
 int stepperPos[] = {0,6000};
 int stepperTime[2][2] = {};
 
