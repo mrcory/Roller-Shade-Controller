@@ -11,7 +11,7 @@
  * rst        | Reset home position to 0
  */
 
-//version 1.1.0
+//version 1.2.0
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
