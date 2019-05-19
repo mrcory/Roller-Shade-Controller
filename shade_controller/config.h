@@ -46,5 +46,7 @@ const int stepPerRev = 4096;
 #define ledBrightness //Not used yet
 
 //Extra Stuff
+#define alternateFunction false //Enable alternate use of the reset button
+
 #define rtcBlynk false
 #define cmds true //After setting up positions, cmdArduino can be disabled
