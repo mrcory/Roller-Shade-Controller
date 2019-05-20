@@ -46,6 +46,7 @@ bool myReset = false; //Flag
 bool setHome = false; //Flag
 long int savedPosition = 100;
 bool moveUp = false;
+int motorPos = 0;
 
 unsigned long ledTimer;
 bool ledOn = false;
