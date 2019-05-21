@@ -115,6 +115,9 @@ int oldBrightness = ledBrightness;
 
   void resetClick() {
     Serial.println("Rst Click");
+    lightOn = !lightOn;
+    ledBrightness = ledButtonBrightness;
+    ledTurn(1);
   }
 
   void resetHold() {
@@ -123,10 +126,10 @@ int oldBrightness = ledBrightness;
     ledTurn(1);
   }
 
-  AnalogButtons buttons(buttonPin, INPUT);
+  AnalogButtons buttons(buttonPin, INPUT,4,30);
   Button up = Button(upVal, &upClick, &upHold, 1000, 5000);
   Button down = Button(dnVal, &downClick, &downHold, 1000, 5000);
-  Button rst = Button(rsVal, &resetClick, &resetHold, 1000, 5000);
+  Button rst = Button(rsVal, &resetClick, &resetHold, 2500, 5000);
   
 #endif 
 
@@ -193,11 +196,12 @@ void setup() {
   Serial.print(F("Loaded | Position S|C : ")); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
 
   FastLED.setBrightness(ledBrightness);
-  FastLED.setDither(1);
+  
 }
 
 
 void loop() {
+
 
   oldBrightness = ledBrightness;
    
