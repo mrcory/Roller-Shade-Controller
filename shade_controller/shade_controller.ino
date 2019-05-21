@@ -64,6 +64,7 @@ byte ledMode = 0;
 
 bool lightOn = false;
 bool lightOld = true; 
+int oldBrightness = ledBrightness;
 
 
 #include "wifi.h"
@@ -197,6 +198,8 @@ void setup() {
 
 
 void loop() {
+
+  oldBrightness = ledBrightness;
    
   if (ledFeedback == true) {
     ledFeedbackf();
@@ -209,23 +212,30 @@ void loop() {
   #if buttonEnable
     buttons.check(); //Check for button presses
   #endif
-  
+
+
+  //If not moveing, run extra features
   if (stepper.distanceToGo() == 0) {
     blynkRun(); //Only run blynk when the stepper is not active
 
     if (setHome == true) {
       setHome = false;
     }
+
+  lightControl();
+
+  if (ledBrightness != oldBrightness) {
+    FastLED.setBrightness(ledBrightness);
+    FastLED.show();
+  }
   }
   
   stepper.run(); //AccelStepper runs here
   
   moveNow();
 
-  lightControl();
 
-  FastLED.setBrightness(ledBrightness);
-  FastLED.show();
+  
 }
 
 
@@ -233,15 +243,13 @@ void loop() {
 void lightControl() {
   
   if (lightOn == true && lightOld != lightOn) {
-    for (int i = 0;i<NUM_LEDS;i++) {
-      leds[i] = CRGB::White;
-    }
+    fill_solid(leds,NUM_LEDS,CRGB::White);
+    FastLED.show();
   }
 
-  if (lightOn == false) {
-    for (int i=0;i<NUM_LEDS;i++) {
-      leds[i].fadeToBlackBy( 32 );
-    }
+  if (lightOn == false && lightOld != lightOn) {
+    fill_solid(leds,NUM_LEDS,CRGB(0,0,0));
+    FastLED.show();
   }
   lightOld = lightOn;
 }
