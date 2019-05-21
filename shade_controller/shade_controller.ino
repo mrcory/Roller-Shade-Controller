@@ -25,6 +25,16 @@
 #include <Ethernet.h>
 #include "config.h"
 
+#include <FastLED.h>
+FASTLED_USING_NAMESPACE
+#define NUM_LEDS 9
+
+#define DATA_PIN    2
+#define LED_TYPE    WS2812
+#define COLOR_ORDER GRB
+
+CRGB leds[NUM_LEDS];
+
 #if cmds
   #include <Cmd.h>
 #endif
@@ -49,8 +59,11 @@ bool moveUp = false;
 int motorPos = 0;
 
 unsigned long ledTimer;
-bool ledOn = false;
+bool ledFeedback = false;
 byte ledMode = 0;
+
+bool lightOn = false;
+bool lightOld = true; 
 
 
 #include "wifi.h"
@@ -123,7 +136,12 @@ byte ledMode = 0;
   BlynkTimer timer1;
 #endif
 
+
+
 void setup() {
+
+  //FastLED.addLeds<WS2811, 2, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
   pinMode(ledPin,OUTPUT);
   digitalWrite(ledPin,LOW);
@@ -172,12 +190,16 @@ void setup() {
   
   
   Serial.print(F("Loaded | Position S|C : ")); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
+
+  FastLED.setBrightness(ledBrightness);
+  FastLED.setDither(1);
 }
 
 
 void loop() {
-  if (ledOn == true) {
-    ledFeedback();
+   
+  if (ledFeedback == true) {
+    ledFeedbackf();
   }
 
   #if cmds
@@ -199,10 +221,29 @@ void loop() {
   stepper.run(); //AccelStepper runs here
   
   moveNow();
+
+  lightControl();
+
+  FastLED.setBrightness(ledBrightness);
+  FastLED.show();
 }
 
 
 
+void lightControl() {
+  
+  if (lightOn == true && lightOld != lightOn) {
+    for (int i = 0;i<NUM_LEDS;i++) {
+      leds[i] = CRGB::White;
+    }
+  }
 
+  if (lightOn == false) {
+    for (int i=0;i<NUM_LEDS;i++) {
+      leds[i].fadeToBlackBy( 32 );
+    }
+  }
+  lightOld = lightOn;
+}
 
 

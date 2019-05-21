@@ -21,3 +21,12 @@ BLYNK_WRITE(V13) {
 BLYNK_WRITE(V20) {
   motorPos = param.asInt();
 }
+
+BLYNK_WRITE(V21) {
+  lightOn = param.asInt();
+}
+
+BLYNK_WRITE(V22) {
+  ledBrightness = param.asInt();
+}
+

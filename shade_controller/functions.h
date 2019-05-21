@@ -25,7 +25,7 @@ void configLoad() {
 Serial.println(savedPosition);
 }
 
-void ledFeedback() {
+void ledFeedbackf() {
 
   if (ledMode == 0) {
     if (ledTimer > millis() - 500) {
@@ -58,7 +58,7 @@ void ledFeedback() {
 
 void ledTurn(int _mode) {
     ledTimer  = millis();
-    ledOn = true;
+    ledFeedback = true;
     ledMode = _mode;
 }
 
@@ -157,3 +157,5 @@ void moveNow() {
     }
   }
 #endif
+
+

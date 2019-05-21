@@ -41,8 +41,16 @@ const int stepPerRev = 4096;
 #define ANALOGBUTTONS_SAMPLING_INTERVAL 10
 
 //Feedback for button presses
-#define ledPin D1
-#define ledBrightness //Not used yet
+#define lightEnable true //Allow control of LED
+#define lightMode 1 //0-PWM 1-FastLED
+#define ledPin D1 //Feedback LED
+
+
+
+
+int ledBrightness = 2; //Not used yet
+
+
 
 //Extra Stuff
 #define alternateFunction false //Enable alternate use of the reset button
