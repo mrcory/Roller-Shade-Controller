@@ -44,7 +44,7 @@ const int stepPerRev = 4096;
 //Feedback for button presses
 #define lightEnable true //Allow control of LED
 #define lightMode 1 //0-PWM 1-FastLED
-#define ledPin D1 //Feedback LED
+#define ledPin D4 //Feedback LED
 
 #define alternateFunction false //Enable alternate use of the reset button
 
