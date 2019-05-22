@@ -20,15 +20,22 @@ int connectTimeout = 100; // How many attempts can we make before giving up on B
 //------Timer
 int stepperPos[] = {0,6000};
 int stepperTime[2][2] = {};
+//------Not currently used
 
+/*Set size for the eeprom.
+ * 512 is way more than will be needed.
+ * All that is being stored there is position data
+ * after each move is completed.
+ */
 const int eepromSize = 512;
 
-const int stepPerRev = 4096;
 //Declare motor pins
 #define mtrPin1 D8//D5
 #define mtrPin2 D6//D7
 #define mtrPin3 D7//D6
 #define mtrPin4 D5//D8
+
+const int stepPerRev = 4096; //Steps needed to make 1 revolution
 
 //Button Config
 #define buttonEnable true //True to enable button controls
@@ -39,20 +46,32 @@ const int stepPerRev = 4096;
 #define dnVal 875
 #define rsVal 1024
 
+/* The margin that analogButtons uses to determine
+ *  if a button has been pressed. Default is 20, but
+ *  I use 30. As long as there is plenty of gap between 
+ *  values set above, this can be set larger.
+ */
+#define buttonMargin 30
+
 #define ANALOGBUTTONS_SAMPLING_INTERVAL 10
 
 //Feedback for button presses
 #define lightEnable true //Allow control of LED
-#define lightMode 1 //0-PWM 1-FastLED
 #define ledPin D4 //Feedback LED
 
+/* This will allow control of an accessory light via
+ *  PWM or FastLED.
+ *  If using FastLED controlled lights, be careful of
+ *  the number you use. Always calcualte the max possible
+ *  power consumption and add a safety margin.
+ */
 #define alternateFunction false //Enable alternate use of the reset button
+#define lightMode 1 //0-PWM 1-FastLED | PWM is currently not implemented.
 
-
-int ledBrightness = 2;
+//Light accessory settings (Not the feedback LED)
+//Using FastLED to run some WS2812
+int ledBrightness = 2;        //Starting brightness
 int ledButtonBrightness = 50; //Brightness to use when using rst button to turn on light.
-
-
 
 
 //Extra Stuff

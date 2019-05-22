@@ -16,15 +16,14 @@
 #include <AccelStepper.h>
 #include <EEPROM.h>
 
-
-
-#define HALFSTEP 8
+#define HALFSTEP 8 //This is for AccelStepper
 
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 #include <Ethernet.h>
 #include "config.h"
 
+//FastLED Setup
 #include <FastLED.h>
 FASTLED_USING_NAMESPACE
 #define NUM_LEDS 9
@@ -35,13 +34,12 @@ FASTLED_USING_NAMESPACE
 
 CRGB leds[NUM_LEDS];
 
-#if cmds
+
+#if cmds //Enable cmdArduino
   #include <Cmd.h>
 #endif
 
-
-
-byte lastPosition = 2;
+byte lastPosition = 2; //Storing a starting value
 
 //Configure AccelStepper
 AccelStepper stepper(HALFSTEP, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
@@ -71,10 +69,11 @@ int oldBrightness = ledBrightness;
 #include "functions.h"
 
 
-#if buttonEnable
+#if buttonEnable //Enable physical buttons
 
   #include <AnalogButtons.h>
 
+ //Here we are setting up the fuctions that will be called via the physical buttons.
   void upClick() {
     Serial.println("Up Click");
     if (lastPosition > 1) {
@@ -126,14 +125,15 @@ int oldBrightness = ledBrightness;
     ledTurn(1);
   }
 
-  AnalogButtons buttons(buttonPin, INPUT,4,30);
+  //Create tha actual buttons
+  AnalogButtons buttons(buttonPin, INPUT,4,buttonMargin);
   Button up = Button(upVal, &upClick, &upHold, 1000, 5000);
   Button down = Button(dnVal, &downClick, &downHold, 1000, 5000);
   Button rst = Button(rsVal, &resetClick, &resetHold, 2500, 5000);
   
 #endif 
 
-#if rtcBlynk
+#if rtcBlynk //Enable the RTC feature from Blynk
   //Blynk RTC
   #include <WidgetRTC.h>
   WidgetRTC RTC;
@@ -143,8 +143,6 @@ int oldBrightness = ledBrightness;
 
 
 void setup() {
-
-  //FastLED.addLeds<WS2811, 2, GRB>(leds, NUM_LEDS);
   FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
   pinMode(ledPin,OUTPUT);
@@ -156,7 +154,7 @@ void setup() {
     buttons.add(rst);
   #endif
 
-  #if cmds
+  #if cmds //Define our serial commands if enabled
     cmdInit(&Serial);
     cmdAdd("move",manualMove);
     cmdAdd("rst",homePos);
@@ -171,9 +169,9 @@ void setup() {
   delay(50);
   blynkConfig();
 
-  EEPROM.begin(eepromSize);
+  EEPROM.begin(eepromSize); //Initialize the EEPROM with our selected size
 
-  if (EEPROM.read(0) == 1) {
+  if (EEPROM.read(0) == 1) { //If flagged in EEPROM; we load our current position
     configLoad();
   }
 
@@ -197,7 +195,7 @@ void setup() {
 
   FastLED.setBrightness(ledBrightness);
   
-}
+} //END SETUP
 
 
 void loop() {
@@ -226,21 +224,19 @@ void loop() {
       setHome = false;
     }
 
-  lightControl();
-
-  if (ledBrightness != oldBrightness) {
-    FastLED.setBrightness(ledBrightness);
-    FastLED.show();
-  }
+    lightControl();
+  
+    if (ledBrightness != oldBrightness) {
+      FastLED.setBrightness(ledBrightness);
+      FastLED.show();
+    }
   }
   
   stepper.run(); //AccelStepper runs here
   
   moveNow();
-
-
   
-}
+} //END LOOP
 
 
 
