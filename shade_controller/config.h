@@ -68,8 +68,11 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
 #define alternateFunction false //Enable alternate use of the reset button
 #define lightMode 1 //0-PWM 1-FastLED | PWM is currently not implemented.
 
-//Light accessory settings (Not the feedback LED)
-//Using FastLED to run some WS2812
+/* Light accessory settings (Not the feedback LED)
+ *  Using FastLED to run some WS2812 
+ *  The data pin for the WS2812 is set in the main ino 
+ *  around line 31
+*/
 int ledBrightness = 2;        //Starting brightness
 int ledButtonBrightness = 50; //Brightness to use when using rst button to turn on light.
 
