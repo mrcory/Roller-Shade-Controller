@@ -30,3 +30,9 @@ BLYNK_WRITE(V22) {
   ledBrightness = param.asInt();
 }
 
+BLYNK_WRITE(V23) {
+  currentColor[0] = param[0].asInt();
+  currentColor[1] = param[1].asInt();
+  currentColor[2] = param[2].asInt(); 
+}
+

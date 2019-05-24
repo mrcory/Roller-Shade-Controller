@@ -28,7 +28,7 @@
 FASTLED_USING_NAMESPACE
 #define NUM_LEDS 9
 
-#define DATA_PIN    3
+#define DATA_PIN    D1
 #define LED_TYPE    WS2812
 #define COLOR_ORDER GRB
 
@@ -63,6 +63,7 @@ byte ledMode = 0;
 bool lightOn = false;
 bool lightOld = true; 
 int oldBrightness = ledBrightness;
+int currentColor[3] = {255,255,255};
 
 
 #include "wifi.h"
@@ -143,7 +144,7 @@ int oldBrightness = ledBrightness;
 
 
 void setup() {
-  FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS);//.setCorrection(TypicalLEDStrip);
 
   pinMode(ledPin,OUTPUT);
   digitalWrite(ledPin,LOW);
@@ -228,8 +229,10 @@ void loop() {
   
     if (ledBrightness != oldBrightness) {
       FastLED.setBrightness(ledBrightness);
-      FastLED.show();
     }
+
+        FastLED.show();
+
   }
   
   stepper.run(); //AccelStepper runs here
@@ -242,14 +245,12 @@ void loop() {
 
 void lightControl() {
   
-  if (lightOn == true && lightOld != lightOn) {
-    fill_solid(leds,NUM_LEDS,CRGB::White);
-    FastLED.show();
+  if (lightOn == true) {
+    fill_solid(leds,NUM_LEDS,CRGB(currentColor[0],currentColor[1],currentColor[2]));
   }
 
   if (lightOn == false && lightOld != lightOn) {
     fill_solid(leds,NUM_LEDS,CRGB(0,0,0));
-    FastLED.show();
   }
   lightOld = lightOn;
 }
