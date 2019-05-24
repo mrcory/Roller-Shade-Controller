@@ -76,6 +76,8 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
 */
 int ledBrightness = 2;        //Starting brightness
 int ledButtonBrightness = 50; //Brightness to use when using rst button to turn on light.
+int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it will loop to near 0
+                              //Can be set in Blynk
 
 //FastLED Settings
 #define NUM_LEDS 9         //Number of attached LEDs

@@ -158,4 +158,14 @@ void moveNow() {
   }
 #endif
 
+unsigned long timer = millis();
+
+bool timerFunc(int _comp) {
+  if (millis() - timer >= _comp) {
+    return true;
+    timer = millis();
+  } else {
+    return false;
+  }
+}
 

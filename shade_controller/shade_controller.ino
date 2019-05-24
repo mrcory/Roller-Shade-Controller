@@ -57,11 +57,13 @@ int motorPos = 0;
 unsigned long ledTimer;
 bool ledFeedback = false;
 byte ledMode = 0;
+bool pulse = false; //Basic effect
 
 bool lightOn = false;
 bool lightOld = true; 
 int oldBrightness = ledBrightness;
 int currentColor[3] = {255,255,255};
+int pulseSpeed = 2;
 
 
 #include "wifi.h"
@@ -251,6 +253,20 @@ void lightControl() {
     fill_solid(leds,NUM_LEDS,CRGB(0,0,0));
   }
   lightOld = lightOn;
+
+  static bool _direction = false; //Flag for fade direction
+
+  if (pulse == true) {
+    if (timerFunc(pulseSpeed)) {
+      if (_direction == true) {
+        if (ledBrightness < pulseMax) { ledBrightness+=2; } else {_direction = false;}
+      }
+
+      if (_direction  == false) {
+        if (ledBrightness > 5) { ledBrightness-=2; } else {_direction = true;}
+      }    
+    }
+  }
 }
 
 

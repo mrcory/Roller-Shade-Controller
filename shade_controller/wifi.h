@@ -36,3 +36,15 @@ BLYNK_WRITE(V23) {
   currentColor[2] = param[2].asInt(); 
 }
 
+BLYNK_WRITE(V24) {
+  pulse = param.asInt();
+}
+
+BLYNK_WRITE(V25) {
+  pulseSpeed = param.asInt();
+}
+
+BLYNK_WRITE(V26) {
+  pulseMax = param.asInt();
+}
+
