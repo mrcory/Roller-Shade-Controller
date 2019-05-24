@@ -9,7 +9,7 @@ long shade[5] = {0,20500,41000,60000,0};
 #define stepperSpeed 950.0 //Max Speed
 #define stepperAccel 200.0  //Acceleration Rate
 
-int connectTimeout = 100; // How many attempts can we make before giving up on Blynk
+int connectTimeout = 100;      // How many attempts can we make before giving up on Blynk
 #define blynkRtcInterval = 30; //How often to sync the time
 
 #include "blynk.h" //Contains Blynk login
@@ -39,7 +39,7 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
 
 //Button Config
 #define buttonEnable true //True to enable button controls
-#define buttonPin A0 //Analog pin for buttons
+#define buttonPin A0      //Analog pin for buttons
 
 //AnalogRead values for buttons
 #define upVal 964
@@ -52,12 +52,13 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
  *  values set above, this can be set larger.
  */
 #define buttonMargin 30
+#define buttonDebounce 3 //Debounce for buttons. Lower causes faster trigger.
 
 #define ANALOGBUTTONS_SAMPLING_INTERVAL 10
 
 //Feedback for button presses
 #define lightEnable true //Allow control of LED
-#define ledPin D4 //Feedback LED
+#define ledPin D4        //Feedback LED
 
 /* This will allow control of an accessory light via
  *  PWM or FastLED.
@@ -66,7 +67,7 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
  *  power consumption and add a safety margin.
  */
 #define alternateFunction false //Enable alternate use of the reset button
-#define lightMode 1 //0-PWM 1-FastLED | PWM is currently not implemented.
+#define lightMode 1             //0-PWM 1-FastLED | PWM is currently not implemented.
 
 /* Light accessory settings (Not the feedback LED)
  *  Using FastLED to run some WS2812 
@@ -75,6 +76,12 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
 */
 int ledBrightness = 2;        //Starting brightness
 int ledButtonBrightness = 50; //Brightness to use when using rst button to turn on light.
+
+//FastLED Settings
+#define NUM_LEDS 9         //Number of attached LEDs
+#define DATA_PIN    D1     //Communication pin for the LEDs
+#define LED_TYPE    WS2812 //LED controller
+#define COLOR_ORDER GRB    //Order to send colors
 
 
 //Extra Stuff

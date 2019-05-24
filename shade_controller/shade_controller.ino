@@ -26,11 +26,9 @@
 //FastLED Setup
 #include <FastLED.h>
 FASTLED_USING_NAMESPACE
-#define NUM_LEDS 9
 
-#define DATA_PIN    D1
-#define LED_TYPE    WS2812
-#define COLOR_ORDER GRB
+
+
 
 CRGB leds[NUM_LEDS];
 
@@ -127,7 +125,7 @@ int currentColor[3] = {255,255,255};
   }
 
   //Create tha actual buttons
-  AnalogButtons buttons(buttonPin, INPUT,4,buttonMargin);
+  AnalogButtons buttons(buttonPin, INPUT,buttonDebounce,buttonMargin);
   Button up = Button(upVal, &upClick, &upHold, 1000, 5000);
   Button down = Button(dnVal, &downClick, &downHold, 1000, 5000);
   Button rst = Button(rsVal, &resetClick, &resetHold, 2500, 5000);
