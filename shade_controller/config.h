@@ -81,7 +81,7 @@ int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it wil
 
 //FastLED Settings
 #define NUM_LEDS 9         //Number of attached LEDs
-#define DATA_PIN    D1     //Communication pin for the LEDs
+#define DATA_PIN    D1     //Communication pin for the LEDs | Same pin will be used for either LED control
 #define LED_TYPE    WS2812 //LED controller
 #define COLOR_ORDER GRB    //Order to send colors
 
