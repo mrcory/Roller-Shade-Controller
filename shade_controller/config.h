@@ -42,8 +42,8 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
 #define buttonPin A0      //Analog pin for buttons
 
 //AnalogRead values for buttons
-#define upVal 964
-#define dnVal 875
+#define upVal 895
+#define dnVal 980
 #define rsVal 1024
 
 /* The margin that analogButtons uses to determine
@@ -57,8 +57,7 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
 #define ANALOGBUTTONS_SAMPLING_INTERVAL 10
 
 //Feedback for button presses
-#define lightEnable true //Allow control of LED
-#define ledPin D4        //Feedback LED
+#define ledPin D3        //Feedback LED
 
 /* This will allow control of an accessory light via
  *  PWM or FastLED.
@@ -74,7 +73,7 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
  *  The data pin for the WS2812 is set in the main ino 
  *  around line 31
 */
-int ledBrightness = 2;        //Starting brightness
+int ledBrightness = 0;        //Starting brightness
 int ledButtonBrightness = 50; //Brightness to use when using rst button to turn on light.
 int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it will loop to near 0
                               //Can be set in Blynk
