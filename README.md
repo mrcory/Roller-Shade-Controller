@@ -10,6 +10,9 @@ More features, like physical button control, will add a little bit to the cost b
 
 ## Project Info
 
+## Setup
+[Check The Wiki](https://github.com/mrcory/Roller-Shade-Controller/wiki)
+
 ### Hardware
  [Thingiverse Models](https://www.thingiverse.com/thing:3628982) are now available.
  
