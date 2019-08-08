@@ -28,8 +28,6 @@
 FASTLED_USING_NAMESPACE
 
 
-
-
 CRGB leds[NUM_LEDS];
 
 
@@ -219,7 +217,7 @@ void loop() {
   #endif
 
 
-  //If not moveing, run extra features
+  //If not moving, run extra features
   if (stepper.distanceToGo() == 0) {
     blynkRun(); //Only run blynk when the stepper is not active
 
