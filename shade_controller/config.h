@@ -1,16 +1,23 @@
 //Config stuff
 
-//Set positions 1-4 in steps for stop locations. 
-//Scaled is figured for 10 positions between 1 and 4
-//Position:     1    2     3     4   Scaled
+/* Set positions 1-4 in steps for stop locations. 
+ * Scaled is figured for 10 positions between 1 and 4
+ * Position:     1    2     3     4   Scaled
+ */
 long shade[5] = {0,20500,41000,60000,0};
 
-//Speed Settings in Steps/Second
+/* Speed Settings in Steps/Second
+ * You will have to play with these values to find a 
+ * reliable setup. I recomend putting a small extra load
+ * (lightly pressing a finger against the roller) to 
+ * be sure that there is enough strength to lift the shade
+ * reliably.
+ */
 #define stepperSpeed 950.0 //Max Speed
 #define stepperAccel 200.0  //Acceleration Rate
 
 int connectTimeout = 100;      // How many attempts can we make before giving up on Blynk
-#define blynkRtcInterval = 30; //How often to sync the time
+#define blynkRtcInterval = 30; // How often to sync the time. (Would be used for timers)
 
 #include "blynk.h" //Contains Blynk login
 
@@ -22,7 +29,7 @@ int stepperPos[] = {0,6000};
 int stepperTime[2][2] = {};
 //------Not currently used
 
-/*Set size for the eeprom.
+/* Set size for the eeprom.
  * 512 is way more than will be needed.
  * All that is being stored there is position data
  * after each move is completed.
@@ -46,29 +53,28 @@ const int stepPerRev = 4096; //Steps needed to make 1 revolution
 #define dnVal 980
 #define rsVal 1024
 
-/* The margin that analogButtons uses to determine
+/*  The margin that analogButtons uses to determine
  *  if a button has been pressed. Default is 20, but
  *  I use 30. As long as there is plenty of gap between 
  *  values set above, this can be set larger.
  */
 #define buttonMargin 30
 #define buttonDebounce 3 //Debounce for buttons. Lower causes faster trigger.
-
 #define ANALOGBUTTONS_SAMPLING_INTERVAL 10
 
 //Feedback for button presses
 #define ledPin D3        //Feedback LED
 
-/* This will allow control of an accessory light via
+/*  This will allow control of an accessory light via
  *  PWM or FastLED.
  *  If using FastLED controlled lights, be careful of
  *  the number you use. Always calcualte the max possible
  *  power consumption and add a safety margin.
  */
 #define alternateFunction false //Enable alternate use of the reset button
-#define lightMode 1             //0-PWM 1-FastLED | PWM is currently not implemented.
+#define lightMode 0             //0-PWM 1-FastLED | PWM is currently not implemented.
 
-/* Light accessory settings (Not the feedback LED)
+/*  Light accessory settings (Not the feedback LED)
  *  Using FastLED to run some WS2812 
  *  The data pin for the WS2812 is set in the main ino 
  *  around line 31
