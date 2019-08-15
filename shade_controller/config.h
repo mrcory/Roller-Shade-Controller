@@ -13,8 +13,8 @@ long shade[5] = {0,20500,41000,60000,0};
  * be sure that there is enough strength to lift the shade
  * reliably.
  */
-#define stepperSpeed 950.0 //Max Speed
-#define stepperAccel 200.0  //Acceleration Rate
+#define stepperSpeed 1100.0 //Max Speed
+#define stepperAccel 175.0  //Acceleration Rate
 
 int connectTimeout = 100;      // How many attempts can we make before giving up on Blynk
 #define blynkRtcInterval = 30; // How often to sync the time. (Would be used for timers)
@@ -37,10 +37,10 @@ int stepperTime[2][2] = {};
 const int eepromSize = 512;
 
 //Declare motor pins
-#define mtrPin1 D8//D5
-#define mtrPin2 D6//D7
-#define mtrPin3 D7//D6
-#define mtrPin4 D5//D8
+#define mtrPin1 D5//D5
+#define mtrPin2 D7//D7
+#define mtrPin3 D6//D6
+#define mtrPin4 D8//D8
 
 const int stepPerRev = 4096; //Steps needed to make 1 revolution
 
@@ -89,6 +89,9 @@ int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it wil
 #define DATA_PIN    D1     //Communication pin for the LEDs | Same pin will be used for either LED control
 #define LED_TYPE    WS2812 //LED controller
 #define COLOR_ORDER GRB    //Order to send colors
+
+//PWM Light Settings
+#define PWM_PIN     D2     //Rev.0 PCB uses D2
 
 
 //Extra Stuff
