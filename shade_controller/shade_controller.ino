@@ -63,6 +63,11 @@ int oldBrightness = ledBrightness;
 int currentColor[3] = {255,255,255};
 int pulseSpeed = 2;
 
+bool pwmOn = false;
+bool pwmOld = false;
+int  pwmBrightness = 0;
+
+
 
 #include "wifi.h"
 #include "functions.h"
@@ -113,8 +118,17 @@ int pulseSpeed = 2;
 
   void resetClick() {
     Serial.println("Rst Click");
-    lightOn = !lightOn;
-    ledBrightness = ledButtonBrightness;
+
+    if (lightMode == 1) {
+      lightOn = !lightOn;
+      ledBrightness = ledButtonBrightness;
+    }
+
+    if (lightMode == 0) {
+      pwmOn = !pwmOn;
+      pwmBrightness = ledButtonBrightness;
+    }
+    
     ledTurn(1);
   }
 
@@ -142,6 +156,8 @@ int pulseSpeed = 2;
 
 
 void setup() {
+  analogWrite(PWM_PIN,0);
+  
   if (lightMode == 1) { //Use FastLED if selected
     FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS);
   }
@@ -222,6 +238,7 @@ void loop() {
     blynkRun(); //Only run blynk when the stepper is not active
 
     if (setHome == true) {
+      resetHold(); //Set current position as home
       setHome = false;
     }
 
@@ -235,6 +252,12 @@ void loop() {
       FastLED.show();
    }
 
+   if (lightMode == 0) {
+    if (pwmBrightness != pwmOld) {
+      analogWrite(PWM_PIN,pwmBrightness);
+      pwmOld = pwmBrightness;
+    }
+   }
   }
   
   stepper.run(); //AccelStepper runs here
@@ -269,6 +292,12 @@ void lightControl() {
           if (ledBrightness > 5) { ledBrightness-=2; } else {_direction = true;}
         }    
       }
+    }
+  }
+
+  if (lightMode == 0) {
+    if (pwmOn == false && pwmBrightness > 0) {
+      pwmBrightness = 0;
     }
   }
 
