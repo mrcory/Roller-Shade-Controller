@@ -48,3 +48,10 @@ BLYNK_WRITE(V26) {
   pulseMax = param.asInt();
 }
 
+BLYNK_WRITE(V27) {
+  pwmBrightness = param.asInt();
+}
+
+BLYNK_WRITE(V28) {
+  pwmOn = param.asInt();
+}
