@@ -31,6 +31,8 @@ Blynk is used as a remote control for this project.
 
 [CmdArduino](https://github.com/fakufaku/CmdArduino) is used for control of serial monitor. (A little library I really like.)
 
+FastLED is used to control addressable LEDs.
+
 ### Goal
 The goal is to make a low cost remote controlled roller shade that can be made DIY. The only tools needed are some hex wrenches, a hacksaw (band saw is also acceptable), and a 3D printer.
 
