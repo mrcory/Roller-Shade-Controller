@@ -11,7 +11,7 @@
  * rst        | Reset home position to 0
  */
 
-//version 1.2.0
+//version 2.0.0
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
@@ -39,6 +39,7 @@ byte lastPosition = 2; //Storing a starting value
 
 //Configure AccelStepper
 AccelStepper stepper(HALFSTEP, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
+
 
 
 
@@ -262,7 +263,7 @@ void loop() {
   
   stepper.run(); //AccelStepper runs here
   
-  moveNow();
+  motorControl();
   
 } //END LOOP
 

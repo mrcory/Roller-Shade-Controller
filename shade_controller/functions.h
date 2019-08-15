@@ -93,17 +93,10 @@ void blynkRun() {
 }
 
 
-//Write motor pins low to be sure the motor is unpowered
-void motorOff() {
-  digitalWrite(mtrPin1,LOW);
-  digitalWrite(mtrPin2,LOW);
-  digitalWrite(mtrPin3,LOW);
-  digitalWrite(mtrPin4,LOW);
-  
-}
 
 
-void moveNow() {
+
+void motorControl() {
 
   //If motor has reached it's target location, run this
   if (stepper.distanceToGo() == 0) {
@@ -168,4 +161,3 @@ bool timerFunc(int _comp) {
     return false;
   }
 }
-

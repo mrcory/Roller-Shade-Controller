@@ -1,11 +1,5 @@
 //Config stuff
 
-/* Set positions 1-4 in steps for stop locations. 
- * Scaled is figured for 10 positions between 1 and 4
- * Position:     1    2     3     4   Scaled
- */
-long shade[5] = {0,20500,41000,60000,0};
-
 /* Speed Settings in Steps/Second
  * You will have to play with these values to find a 
  * reliable setup. I recomend putting a small extra load
@@ -15,6 +9,23 @@ long shade[5] = {0,20500,41000,60000,0};
  */
 #define stepperSpeed 1100.0 //Max Speed
 #define stepperAccel 175.0  //Acceleration Rate
+
+/* Drive motor selection.
+ * You have choice between 2 style motors. 
+ * 
+ * 28BYJ-48 : 5v or 12v | Though slow, these motors are cheap.
+ * The 5v has the advantage of being able to receive power from a
+ * power bank. This could allow operation when your electricity goes out.
+ * 
+ * Nema 17 : 12v        | This motor should be faster, but will require a
+ * brake or to remain powered to hold its position.
+ * 
+ * 28BYJ will be controlled by steps, while Nema will be controlled by degrees.
+ * 
+ * Uncomment the appropriate line below. Edit the config at the top of selected.
+ */
+#include "stepperMini.h"
+//#include "stepperNema.h"
 
 int connectTimeout = 100;      // How many attempts can we make before giving up on Blynk
 #define blynkRtcInterval = 30; // How often to sync the time. (Would be used for timers)
@@ -36,13 +47,7 @@ int stepperTime[2][2] = {};
  */
 const int eepromSize = 512;
 
-//Declare motor pins
-#define mtrPin1 D5//D5
-#define mtrPin2 D7//D7
-#define mtrPin3 D6//D6
-#define mtrPin4 D8//D8
 
-const int stepPerRev = 4096; //Steps needed to make 1 revolution
 
 //Button Config
 #define buttonEnable true //True to enable button controls
