@@ -16,7 +16,7 @@
 #include <AccelStepper.h>
 #include <EEPROM.h>
 
-#define HALFSTEP 8 //This is for AccelStepper
+long currentDistance = 0;
 
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
@@ -38,9 +38,13 @@ CRGB leds[NUM_LEDS];
 byte lastPosition = 2; //Storing a starting value
 
 //Configure AccelStepper
-AccelStepper stepper(HALFSTEP, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
-
-
+#ifdef stepperMini
+  AccelStepper stepper(ctrlType, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
+#endif
+ 
+#ifdef stepperNema
+  AccelStepper stepper = AccelStepper(ctrlType, stepPin, dirPin);
+#endif
 
 
 long int stepPosition = 0;
@@ -67,6 +71,7 @@ int pulseSpeed = 2;
 bool pwmOn = false;
 bool pwmOld = false;
 int  pwmBrightness = 0;
+
 
 
 
@@ -220,6 +225,7 @@ void loop() {
 
 
   oldBrightness = ledBrightness;
+  currentDistance = stepper.distanceToGo();
    
   if (ledFeedback == true) {
     ledFeedbackf();
@@ -260,6 +266,10 @@ void loop() {
     }
    }
   }
+
+  #ifdef stepperNema
+    brakeCheck();
+  #endif
   
   stepper.run(); //AccelStepper runs here
   

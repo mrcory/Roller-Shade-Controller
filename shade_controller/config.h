@@ -6,6 +6,8 @@
  * (lightly pressing a finger against the roller) to 
  * be sure that there is enough strength to lift the shade
  * reliably.
+ * 
+ * .! This is used for both motor types !.
  */
 #define stepperSpeed 1100.0 //Max Speed
 #define stepperAccel 175.0  //Acceleration Rate

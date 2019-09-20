@@ -1,4 +1,5 @@
 //Code for 28BYJ-48
+#define stepperMini
 
 
 /* Config Section
@@ -18,6 +19,8 @@ long shade[5] = {0,20500,41000,60000,0};
 #define mtrPin4 D8//D8
 
 const int stepPerRev = 4096; //Steps needed to make 1 revolution
+
+#define ctrlType 8 //HalfStep
 
 
 /* Motor Specific Functions
