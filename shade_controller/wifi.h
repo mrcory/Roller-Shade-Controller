@@ -79,7 +79,9 @@ BLYNK_WRITE(V32) { //Invert direction
 }
 
 BLYNK_WRITE(V33) { //Reset device for inverted setting
-  resetFlag = param.asInt();
+  configSaveFlag = param.asInt();
+}
+
 BLYNK_WRITE(V34) {
   stepperSpeed[1] = param.asInt();
 }

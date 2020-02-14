@@ -52,7 +52,7 @@ byte lastPosition = 2; //Storing a starting value
   AccelStepper stepper = AccelStepper(ctrlType, stepPin, dirPin);
 #endif
 
-bool resetFlag = false;
+bool configSaveFlag = false;
 long int stepPosition = 0;
 int connectAttempt = 0;
 long int posNow = 0;
@@ -288,10 +288,8 @@ void loop() {
   
   motorControl();
 
-  if (resetFlag == true) {
-    Serial.println("Reseting...");
-    delay(200);
-    ESP.reset();
+  if (configSaveFlag == true) {
+    configSave();
   }
   
 } //END LOOP
