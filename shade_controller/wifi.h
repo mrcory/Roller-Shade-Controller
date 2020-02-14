@@ -18,6 +18,7 @@ void sendBlynk() { //Blynk Feedback
   }
 }
 
+
 BLYNK_WRITE(V11) {
   shade[4] = map(param.asInt(),0,10,shade[0],shade[3]);
 }
