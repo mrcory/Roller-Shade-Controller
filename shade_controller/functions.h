@@ -10,7 +10,13 @@ void configSave() {
   EEPROM.put(i,savedPosition);
   i+=sizeof(savedPosition);
   EEPROM.put(i,lastPosition);
-  i+=sizeof(lastPosition); 
+  i+=sizeof(lastPosition);
+  EEPROM.put(i,stepperAccel);
+  i+=sizeof(stepperAccel);
+  EEPROM.put(i,stepperSpeed);
+  i+=sizeof(stepperSpeed);
+  EEPROM.put(i,invertMotor);
+  i+=sizeof(invertMotor);
   EEPROM.commit();
   Serial.println("Config Saved");
 }
@@ -21,8 +27,15 @@ void configLoad() {
   i+=sizeof(savedPosition);
   EEPROM.get(i,lastPosition);
   i+=sizeof(lastPosition);
+  EEPROM.get(i,stepperAccel);
+  i+=sizeof(stepperAccel);
+  EEPROM.get(i,stepperSpeed);
+  i+=sizeof(stepperSpeed);
+  EEPROM.get(i,invertMotor);
+  i+=sizeof(invertMotor);
   Serial.println("Config Loaded");
-Serial.println(savedPosition);
+  Serial.print("Stepper: Speed|"); Serial.print(stepperSpeed); Serial.print(" Accel:"); Serial.println(stepperAccel);
+  Serial.println("Current Position:" + savedPosition);
 }
 
 void ledFeedbackf() {
@@ -159,5 +172,13 @@ bool timerFunc(int _comp) {
     timer = millis();
   } else {
     return false;
+  }
+}
+
+void checkInvert() {
+  if (inverMotor[0] ~= invertMotor[1]) {
+    for (int i=1;i<3;i++) {
+      shade[i] = shade[i]*-1;
+    }
   }
 }
