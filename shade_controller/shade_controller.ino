@@ -233,6 +233,7 @@ void loop() {
 
   oldBrightness = ledBrightness;
   currentDistance = stepper.distanceToGo();
+  checkInvert();
    
   if (ledFeedback == true) {
     ledFeedbackf();
@@ -249,7 +250,6 @@ void loop() {
 
   //If not moving, run extra features
   if (stepper.distanceToGo() == 0) {
-    blynkRun(); //Only run blynk when the stepper is not active
 
     if (setHome == true) {
       resetHold(); //Set current position as home

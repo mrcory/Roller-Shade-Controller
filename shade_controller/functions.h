@@ -201,5 +201,7 @@ void checkInvert() {
       shade[i] = shade[i]*-1;
     }
     invertMotor[1] = invertMotor[0]; //Set change flag
+    configSave();
+    Serial.println("Direction Inverted");
   }
 }
