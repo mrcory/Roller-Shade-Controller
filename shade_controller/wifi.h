@@ -3,6 +3,12 @@
 
 void sendBlynk() { //Blynk Feedback
   Blynk.virtualWrite(V1,stepper.currentPosition());
+  Blynk.virtualWrite(V11,shade[4]);
+  Blynk.virtualWrite(V26,pulseMax);
+  Blynk.virtualWrite(V27,pwmBrightness);
+  Blynk.virtualWrite(V30,stepperSpeed);
+  Blynk.virtualWrite(V31,stepperAccel);
+  Blynk.virtualWrite(V32,invertMotor[1]);
 }
 
 BLYNK_WRITE(V11) {
