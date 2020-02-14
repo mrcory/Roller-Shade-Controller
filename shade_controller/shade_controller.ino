@@ -68,12 +68,15 @@ bool pulse = false; //Basic effect
 
 bool lightOn = false;
 bool lightOld = true; 
-int oldBrightness = ledBrightness;
+
 int currentColor[3] = {255,255,255};
 int pulseSpeed = 2;
 
 bool pwmOn = false;
+bool pwmOld = false; 
+int  oldBrightness = ledBrightness;
 int  pwmBrightness = 0;
+int  pwmBrightnessOut = 0;
 
 
 
@@ -264,9 +267,8 @@ void loop() {
    }
 
    if (lightMode == 0) {
-    if (pwmBrightness != pwmOld) {
-      analogWrite(PWM_PIN,pwmBrightness);
-      pwmOld = pwmBrightness;
+    if (pwmBrightness != pwmBrightnessOut) {
+      analogWrite(PWM_PIN,pwmBrightnessOut);
     }
    }
   }
