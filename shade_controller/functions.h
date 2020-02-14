@@ -176,7 +176,7 @@ bool timerFunc(int _comp) {
 }
 
 void checkInvert() {
-  if (inverMotor[0] ~= invertMotor[1]) {
+  if (invertMotor[0] != invertMotor[1]) {
     for (int i=1;i<3;i++) {
       shade[i] = shade[i]*-1;
     }
