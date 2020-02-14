@@ -38,7 +38,7 @@ float stepperAccel = 175.0;  //Acceleration Rate
  * [0] is the blynk controlled flag.
  * [1] is used to show that the inversion has been processed.
  */
-bool invertMotor[2] = false;
+bool invertMotor[2] = {false};
 
 int connectTimeout = 100;      // How many attempts can we make before giving up on Blynk
 #define blynkRtcInterval = 30; // How often to sync the time. (Would be used for timers)
