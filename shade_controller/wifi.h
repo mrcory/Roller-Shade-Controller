@@ -55,3 +55,22 @@ BLYNK_WRITE(V27) {
 BLYNK_WRITE(V28) {
   pwmOn = param.asInt();
 }
+
+
+//------Configure device via Blynk
+
+BLYNK_WRITE(V30) { //Speed
+  stepperSpeed = param.asInt();
+}
+
+BLYNK_WRITE(V31) { //Acceleration
+  stepperAccel = param.asInt();
+}
+
+BLYNK_WRITE(V32) { //Invert direction
+  invertMotor = param.asInt();
+}
+
+BLYNK_WRITE(V33) { //Reset device for inverted setting
+  resetFlag = param.asInt();
+}
