@@ -2,7 +2,8 @@
  * Created by: Cory McGahee
  * Free for non-commercial use only
  * 
- * Designed for use with my 3D printed roller shade. (Not yet published)
+ * Designed for use with my 3D printed roller shade.
+ * https://www.thingiverse.com/thing:3628982
  * 
  * 
  * Serial Commands
@@ -11,7 +12,8 @@
  * rst        | Reset home position to 0
  */
 
-//version 2.0.0
+//version 2.5.0
+const byte configVersion = 2; //This will prevent loading an old config from EEPROM
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
@@ -37,16 +39,18 @@ CRGB leds[NUM_LEDS];
 
 byte lastPosition = 2; //Storing a starting value
 
+
+
 //Configure AccelStepper
 #ifdef stepperMini
-  AccelStepper stepper(ctrlType, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
+    AccelStepper stepper(ctrlType, mtrPin4,mtrPin3,mtrPin2,mtrPin1);
 #endif
  
 #ifdef stepperNema
   AccelStepper stepper = AccelStepper(ctrlType, stepPin, dirPin);
 #endif
 
-
+bool resetFlag = false;
 long int stepPosition = 0;
 int connectAttempt = 0;
 long int posNow = 0;
@@ -77,6 +81,7 @@ int  pwmBrightness = 0;
 
 #include "wifi.h"
 #include "functions.h"
+#include "lightcontrol.h"
 
 
 #if buttonEnable //Enable physical buttons
@@ -274,44 +279,11 @@ void loop() {
   stepper.run(); //AccelStepper runs here
   
   motorControl();
+
+  if (resetFlag == true) {
+    Serial.println("Reseting...");
+    delay(200);
+    ESP.reset();
+  }
   
 } //END LOOP
-
-
-
-void lightControl() {
-  
-  if (lightMode == 1) { //Use FastLED if selected
-    if (lightOn == true) {
-      fill_solid(leds,NUM_LEDS,CRGB(currentColor[0],currentColor[1],currentColor[2]));
-    }
-  
-    if (lightOn == false && lightOld != lightOn) {
-      fill_solid(leds,NUM_LEDS,CRGB(0,0,0));
-    }
-    lightOld = lightOn;
-  
-    static bool _direction = false; //Flag for fade direction
-  
-    if (pulse == true) {
-      if (timerFunc(pulseSpeed)) {
-        if (_direction == true) {
-          if (ledBrightness < pulseMax) { ledBrightness+=2; } else {_direction = false;}
-        }
-  
-        if (_direction  == false) {
-          if (ledBrightness > 5) { ledBrightness-=2; } else {_direction = true;}
-        }    
-      }
-    }
-  }
-
-  if (lightMode == 0) {
-    if (pwmOn == false && pwmBrightness > 0) {
-      pwmBrightness = 0;
-    }
-  }
-
-//------LED Strip
-  
-}
