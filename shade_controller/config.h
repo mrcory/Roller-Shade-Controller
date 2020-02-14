@@ -12,8 +12,11 @@
  * 
  * 28BYJ-48 Default; stepperSpeed 1100.0
  *                   stepperAccel 175.0
+ *                   
+ * stepperSpeed[0] is upward speed
+ * stepperSpeed[1] is downward speed
  */
-float stepperSpeed = 1100.0; //Max Speed
+float stepperSpeed[2] = {1100.0,1100.0}; //Max Speed
 float stepperAccel = 175.0;  //Acceleration Rate
 
 /* Drive motor selection.

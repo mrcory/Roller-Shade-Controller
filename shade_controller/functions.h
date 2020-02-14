@@ -19,9 +19,11 @@ void configSave() {
   i+=sizeof(lastPosition);
   EEPROM.put(i,stepperAccel);
   i+=sizeof(stepperAccel);
-  EEPROM.put(i,stepperSpeed);
-  i+=sizeof(stepperSpeed);
-  EEPROM.put(i,invertMotor);
+  EEPROM.put(i,stepperSpeed[0]);
+  i+=sizeof(stepperSpeed[0]);
+  EEPROM.put(i,stepperSpeed[1]);
+  i+=sizeof(stepperSpeed[1]);
+  EEPROM.put(i,invertMotor[0]);
   i+=sizeof(invertMotor[0]);
   EEPROM.put(i,oldBrightness);
   i+=sizeof(oldBrightness);
@@ -37,15 +39,17 @@ void configLoad() {
   i+=sizeof(lastPosition);
   EEPROM.get(i,stepperAccel);
   i+=sizeof(stepperAccel);
-  EEPROM.get(i,stepperSpeed);
-  i+=sizeof(stepperSpeed);
+  EEPROM.get(i,stepperSpeed[0]);
+  i+=sizeof(stepperSpeed[0]);
+  EEPROM.get(i,stepperSpeed[1]);
+  i+=sizeof(stepperSpeed[1]);
   EEPROM.get(i,invertMotor[0]);
   i+=sizeof(invertMotor);
   EEPROM.get(i,oldBrightness);
   i+=sizeof(oldBrightness);
   delay(20);
   Serial.print("Config Loaded | Version "); Serial.println(returnConfigVersion());
-  Serial.print("Stepper: Speed|"); Serial.print(stepperSpeed); Serial.print(" Accel:"); Serial.println(stepperAccel);
+  Serial.print("Stepper: Speed|"); Serial.print(stepperSpeed[2]); Serial.print(" Accel:"); Serial.println(stepperAccel);
   Serial.println("Current Position:" + savedPosition);
 }
 
@@ -130,7 +134,16 @@ void blynkRun() {
 }
 
 
-
+void speedCheck() { //Set speed based oin direction
+  if (lastPosition < motorPos) {
+    stepper.setMaxSpeed(stepperSpeed[1]); //Down Speed
+    Serial.print("Speed set to "); Serial.println(stepperSpeed[1]);
+  } else {
+    stepper.setMaxSpeed(stepperSpeed[0]); //Up Speed
+    Serial.print("Speed set to "); Serial.println(stepperSpeed[0]);
+  }
+  stepper.setAcceleration(stepperAccel);  //Update acceleration
+}
 
 
 void motorControl() {
@@ -150,11 +163,14 @@ void motorControl() {
 
   //Blynk will set a vale to motorPos that is used to set where the motor should run to
   if (motorPos > 0) {
+    speedCheck();
+    
     if (motorPos == 1) {stepper.moveTo(shade[0]);}
     if (motorPos == 2) {stepper.moveTo(shade[1]);}
     if (motorPos == 3) {stepper.moveTo(shade[2]);}
     if (motorPos == 4) {stepper.moveTo(shade[3]);}
     if (motorPos == 5) {stepper.moveTo(shade[4]);}
+    
     Serial.println(F("Blynk Move"));
 
     lastPosition = motorPos; //Before reseting motorPos, save a copy to lastPosition

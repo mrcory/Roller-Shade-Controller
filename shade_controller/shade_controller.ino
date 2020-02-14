@@ -14,7 +14,7 @@
 
 //version 2.5.0
 //Latest tested : 
-const byte configVersion = 2; //This will prevent loading an old config from EEPROM
+const byte configVersion = 1; //This will prevent loading an old config from EEPROM
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
@@ -215,7 +215,7 @@ void setup() {
     setSyncInterval(blynkRtcInterval);
   #endif
   
-  stepper.setMaxSpeed(stepperSpeed);
+  stepper.setMaxSpeed(stepperSpeed[2]);
   stepper.setAcceleration(stepperAccel);
 
   stepper.setCurrentPosition(savedPosition);
