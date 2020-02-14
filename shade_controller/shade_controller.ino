@@ -13,6 +13,7 @@
  */
 
 //version 2.5.0
+//Latest tested : 
 const byte configVersion = 2; //This will prevent loading an old config from EEPROM
 
 #include <AccelStepper.h>
