@@ -1,4 +1,5 @@
 //Config stuff
+//Config Version 2
 
 /* Speed Settings in Steps/Second
  * You will have to play with these values to find a 
@@ -8,9 +9,12 @@
  * reliably.
  * 
  * .! This is used for both motor types !.
+ * 
+ * 28BYJ-48 Default; stepperSpeed 1100.0
+ *                   stepperAccel 175.0
  */
-#define stepperSpeed 1100.0 //Max Speed
-#define stepperAccel 175.0  //Acceleration Rate
+float stepperSpeed = 1100.0; //Max Speed
+float stepperAccel = 175.0;  //Acceleration Rate
 
 /* Drive motor selection.
  * You have choice between 2 style motors. 
@@ -28,6 +32,13 @@
  */
 #include "stepperMini.h"
 //#include "stepperNema.h"
+
+/* Inverting the motor is controlled here.
+ * Inversion can be set here or in the Blynk app.
+ * [0] is the blynk controlled flag.
+ * [1] is used to show that the inversion has been processed.
+ */
+bool invertMotor[2] = false;
 
 int connectTimeout = 100;      // How many attempts can we make before giving up on Blynk
 #define blynkRtcInterval = 30; // How often to sync the time. (Would be used for timers)
