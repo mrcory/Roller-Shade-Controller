@@ -27,6 +27,13 @@ long currentDistance = 0;
 #include "config.h"
 #include "timer.h"
 
+//ArduinoOTA
+#include <ESP8266mDNS.h>
+#include <WiFiUdp.h>
+#include <ArduinoOTA.h>
+#include "ota.h"
+
+
 //FastLED Setup
 #include <FastLED.h>
 FASTLED_USING_NAMESPACE
@@ -201,7 +208,9 @@ void setup() {
   Serial.begin(115200);
   Serial.println("");
   delay(50);
+  
   blynkConfig();
+  setupOTA();
 
   EEPROM.begin(eepromSize); //Initialize the EEPROM with our selected size
 
@@ -238,6 +247,7 @@ void loop() {
   oldBrightness = ledBrightness;
   currentDistance = stepper.distanceToGo();
   checkInvert();
+  ArduinoOTA.handle();
    
   if (ledFeedback == true) {
     ledFeedbackf();
