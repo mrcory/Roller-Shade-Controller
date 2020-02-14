@@ -16,8 +16,8 @@
  * stepperSpeed[0] is upward speed
  * stepperSpeed[1] is downward speed
  */
-float stepperSpeed[2] = {1100.0,1100.0}; //Max Speed
-float stepperAccel = 175.0;  //Acceleration Rate
+float stepperSpeed[2] = {1000.0,1000.0}; //Max Speed
+float stepperAccel = 175.0;     //Acceleration Rate
 
 /* Drive motor selection.
  * You have choice between 2 style motors. 
@@ -43,8 +43,8 @@ float stepperAccel = 175.0;  //Acceleration Rate
  */
 bool invertMotor[2] = {false};
 
-int connectTimeout = 100;      // How many attempts can we make before giving up on Blynk
-#define blynkRtcInterval = 30; // How often to sync the time. (Would be used for timers)
+int connectTimeout = 100;        // How many attempts can we make before giving up on Blynk
+#define blynkRtcInterval = 30;   // How often to sync the time. (Would be used for timers)
 
 #include "blynk.h" //Contains Blynk login
 
@@ -80,11 +80,11 @@ const int eepromSize = 512;
  *  values set above, this can be set larger.
  */
 #define buttonMargin 30
-#define buttonDebounce 3 //Debounce for buttons. Lower causes faster trigger.
+#define buttonDebounce 3        //Debounce for buttons. Lower causes faster trigger.
 #define ANALOGBUTTONS_SAMPLING_INTERVAL 10
 
 //Feedback for button presses
-#define ledPin D3        //Feedback LED
+#define ledPin D3               //Feedback LED
 
 /*  This will allow control of an accessory light via
  *  PWM or FastLED.
@@ -93,31 +93,31 @@ const int eepromSize = 512;
  *  power consumption and add a safety margin.
  */
 #define alternateFunction false //Enable alternate use of the reset button
-#define lightMode 0             //0-PWM 1-FastLED | PWM is currently not implemented.
+#define lightMode 0             //0-PWM 1-FastLED
 
 /*  Light accessory settings (Not the feedback LED)
  *  Using FastLED to run some WS2812 
  *  The data pin for the WS2812 is set in the main ino 
  *  around line 31
 */
-int ledBrightness = 0;        //Starting brightness
-int ledButtonBrightness = 50; //Brightness to use when using rst button to turn on light.
-int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it will loop to near 0
-                              //Can be set in Blynk
+int ledBrightness = 0;         //Starting brightness
+int ledButtonBrightness = 300; //Brightness to use when using rst button to turn on light.
+int pulseMax = 250;            //Max brightness for pulse mode. Max 250 or it will loop to near 0
+                               //Can be set in Blynk
 
 //FastLED Settings
-#define NUM_LEDS 9         //Number of attached LEDs
-#define DATA_PIN    D1     //Communication pin for the LEDs | Same pin will be used for either LED control
-#define LED_TYPE    WS2812 //LED controller
-#define COLOR_ORDER GRB    //Order to send colors
+#define NUM_LEDS 9             //Number of attached LEDs
+#define DATA_PIN    D1         //Communication pin for the LEDs | Same pin will be used for either LED control
+#define LED_TYPE    WS2812     //LED controller
+#define COLOR_ORDER GRB        //Order to send colors
 
 //PWM Light Settings
-#define PWM_PIN     D2     //Rev.0 PCB uses D2
+#define PWM_PIN     D2         //Rev.0 PCB uses D2
 
 
 //Extra Stuff
 #define rtcBlynk false
-#define cmds true //After setting up positions, cmdArduino can be disabled
+#define cmds true             //After setting up positions, cmdArduino can be disabled
 
 //ArduinoOTA
 #define myHostname "Shade" 
