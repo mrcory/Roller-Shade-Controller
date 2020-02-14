@@ -17,7 +17,7 @@ void configSave() {
   EEPROM.put(i,stepperSpeed);
   i+=sizeof(stepperSpeed);
   EEPROM.put(i,invertMotor);
-  i+=sizeof(invertMotor);
+  i+=sizeof(invertMotor[0]);
   EEPROM.put(i,oldBrightness);
   i+=sizeof(oldBrightness);
   EEPROM.commit();
@@ -34,7 +34,7 @@ void configLoad() {
   i+=sizeof(stepperAccel);
   EEPROM.get(i,stepperSpeed);
   i+=sizeof(stepperSpeed);
-  EEPROM.get(i,invertMotor);
+  EEPROM.get(i,invertMotor[0]);
   i+=sizeof(invertMotor);
   EEPROM.get(i,oldBrightness);
   i+=sizeof(oldBrightness);
@@ -49,6 +49,7 @@ bool configMatch() {
   EEPROM.get(2,grabbedVersion);
 
   if (grabbedVersion == configVersion) {
+
     Serial.println("Config Match");
     return true;
   } else {
@@ -186,11 +187,16 @@ void motorControl() {
 
 void checkInvert() {
   if (invertMotor[0] != invertMotor[1]) {
-    for (int i=1;i<3;i++) {
+    for (int i=1;i<=3;i++) {
       shade[i] = shade[i]*-1;
     }
     invertMotor[1] = invertMotor[0]; //Set change flag
     configSave();
-    Serial.println("Direction Inverted");
+    Serial.print("Direction ");
+      if (invertMotor[1] == true) {
+        Serial.println("Inverted"); 
+      } else {
+        Serial.println("Reverted");
+      }
   }
 }
