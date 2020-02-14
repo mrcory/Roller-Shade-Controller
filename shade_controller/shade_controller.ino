@@ -275,8 +275,9 @@ void loop() {
    }
 
    if (lightMode == 0) {
-    if (pwmBrightness != pwmBrightnessOut) {
+    if (pwmBrightness != oldBrightness) {
       analogWrite(PWM_PIN,pwmBrightnessOut);
+      oldBrightness = pwmBrightnessOut;
     }
    }
   }
