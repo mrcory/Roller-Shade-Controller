@@ -12,7 +12,7 @@ void sendBlynk() { //Blynk Feedback
     Blynk.virtualWrite(V31,stepperAccel);
     Blynk.virtualWrite(V32,invertMotor[1]);
     Blynk.virtualWrite(V34,stepperSpeed[1]);
-    firstrun = false;
+    firstRun = false;
   }
 }
 
