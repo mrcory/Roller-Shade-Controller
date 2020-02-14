@@ -12,6 +12,7 @@
  */
 long shade[5] = {0,20500,41000,60000,0};
 
+
 //Declare motor pins
 #define mtrPin1 D5//D5
 #define mtrPin2 D7//D7
@@ -20,7 +21,7 @@ long shade[5] = {0,20500,41000,60000,0};
 
 const int stepPerRev = 4096; //Steps needed to make 1 revolution
 
-#define ctrlType 8 //HalfStep
+#define ctrlType 8 //Do not change
 
 
 /* Motor Specific Functions
