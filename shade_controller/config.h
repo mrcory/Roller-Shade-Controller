@@ -115,3 +115,6 @@ int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it wil
 //Extra Stuff
 #define rtcBlynk false
 #define cmds true //After setting up positions, cmdArduino can be disabled
+
+//How many ms until Blynk.run is triggered
+const unsigned long blynkRefresh = 250;

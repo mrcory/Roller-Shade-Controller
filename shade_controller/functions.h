@@ -184,17 +184,6 @@ void motorControl() {
   }
 #endif
 
-unsigned long timer = millis();
-
-bool timerFunc(int _comp) {
-  if (millis() - timer >= _comp) {
-    return true;
-    timer = millis();
-  } else {
-    return false;
-  }
-}
-
 void checkInvert() {
   if (invertMotor[0] != invertMotor[1]) {
     for (int i=1;i<3;i++) {

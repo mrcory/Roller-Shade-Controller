@@ -24,6 +24,7 @@ long currentDistance = 0;
 #include <BlynkSimpleEsp8266.h>
 #include <Ethernet.h>
 #include "config.h"
+#include "timer.h"
 
 //FastLED Setup
 #include <FastLED.h>
@@ -169,6 +170,7 @@ int  pwmBrightnessOut = 0;
 
 
 void setup() {
+  timerSetup();
   analogWrite(PWM_PIN,0);
   
   if (lightMode == 1) { //Use FastLED if selected
@@ -250,6 +252,10 @@ void loop() {
 
   //If not moving, run extra features
   if (stepper.distanceToGo() == 0) {
+    if (timer(0,blynkRefresh)) { //Run blyk every other cycle
+         blynkRun();        //Only run blynk when the stepper is not active
+    }
+   
 
     if (setHome == true) {
       resetHold(); //Set current position as home

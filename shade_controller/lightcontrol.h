@@ -13,7 +13,7 @@ void lightControl() {
     static bool _direction = false; //Flag for fade direction
   
     if (pulse == true) {
-      if (timerFunc(pulseSpeed)) {
+      if (timer(1,pulseSpeed)) {
         if (_direction == true) {
           if (ledBrightness < pulseMax) { ledBrightness+=2; } else {_direction = false;}
         }
