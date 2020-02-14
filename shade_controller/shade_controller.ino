@@ -14,7 +14,7 @@
 
 //version 2.5.0
 //Latest tested : 
-const byte configVersion = 2; //This will prevent loading an old config from EEPROM
+const byte configVersion = 1; //This will prevent loading an old config from EEPROM
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
@@ -32,6 +32,8 @@ long currentDistance = 0;
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include "ota.h"
+
+WidgetTerminal terminal(V1);
 
 
 //FastLED Setup
