@@ -26,9 +26,10 @@ void lightControl() {
   }
 
   if (lightMode == 0) {
-    if (pwmOn == false && pwmBrightnessOut > 0) {
+    if (pwmOn == false) {
       pwmBrightnessOut = 0;
-    } else {
+    }
+    if (pwmOn == true && pwmBrightness != pwmBrightnessOut) {
       pwmBrightnessOut = pwmBrightness;
     }
   }
