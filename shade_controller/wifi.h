@@ -68,7 +68,7 @@ BLYNK_WRITE(V31) { //Acceleration
 }
 
 BLYNK_WRITE(V32) { //Invert direction
-  invertMotor = param.asInt();
+  invertMotor[0] = param.asInt();
 }
 
 BLYNK_WRITE(V33) { //Reset device for inverted setting
