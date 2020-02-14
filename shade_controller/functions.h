@@ -6,7 +6,8 @@
 void configSave() {
   //Position 400 is reserved for the blynk token
   EEPROM.write(0,1); //Flag for autoload
-  int i=5;
+  EEPROM.put(2,configVersion);
+  int i=10;
   EEPROM.put(i,savedPosition);
   i+=sizeof(savedPosition);
   EEPROM.put(i,lastPosition);
@@ -17,12 +18,14 @@ void configSave() {
   i+=sizeof(stepperSpeed);
   EEPROM.put(i,invertMotor);
   i+=sizeof(invertMotor);
+  EEPROM.put(i,oldBrightness);
+  i+=sizeof(oldBrightness);
   EEPROM.commit();
   Serial.println("Config Saved");
 }
 
 void configLoad() {
-  int i=5;
+  int i=10;
   EEPROM.get(5,savedPosition);
   i+=sizeof(savedPosition);
   EEPROM.get(i,lastPosition);
@@ -33,10 +36,27 @@ void configLoad() {
   i+=sizeof(stepperSpeed);
   EEPROM.get(i,invertMotor);
   i+=sizeof(invertMotor);
-  Serial.println("Config Loaded");
+  EEPROM.get(i,oldBrightness);
+  i+=sizeof(oldBrightness);
+  delay(20);
+  Serial.println("Config Loaded | Version " + EEPROM.get(2,configVersion));
   Serial.print("Stepper: Speed|"); Serial.print(stepperSpeed); Serial.print(" Accel:"); Serial.println(stepperAccel);
   Serial.println("Current Position:" + savedPosition);
 }
+
+bool configMatch() {
+  byte grabbedVersion;
+  EEPROM.get(2,grabbedVersion);
+
+  if (grabbedVersion == configVersion) {
+    Serial.println("Config Match");
+    return true;
+  } else {
+    Serial.println("Config Mismatch");
+    return false;
+  }
+}
+
 
 void ledFeedbackf() {
 

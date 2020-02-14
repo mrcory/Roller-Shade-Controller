@@ -73,7 +73,6 @@ int currentColor[3] = {255,255,255};
 int pulseSpeed = 2;
 
 bool pwmOn = false;
-bool pwmOld = false;
 int  pwmBrightness = 0;
 
 
@@ -199,7 +198,7 @@ void setup() {
 
   EEPROM.begin(eepromSize); //Initialize the EEPROM with our selected size
 
-  if (EEPROM.read(0) == 1) { //If flagged in EEPROM; we load our current position
+  if (EEPROM.read(0) == 1 && configMatch()) { //If flagged in EEPROM; we load our current position
     configLoad();
   }
 
