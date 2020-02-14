@@ -1,6 +1,11 @@
 
 
 
+byte returnConfigVersion() {
+  byte grabbedVersion;
+  EEPROM.get(2,grabbedVersion);
+  return grabbedVersion;
+}
 
 
 void configSave() {
@@ -39,17 +44,15 @@ void configLoad() {
   EEPROM.get(i,oldBrightness);
   i+=sizeof(oldBrightness);
   delay(20);
-  Serial.println("Config Loaded | Version " + EEPROM.get(2,configVersion));
+  Serial.print("Config Loaded | Version "); Serial.println(returnConfigVersion());
   Serial.print("Stepper: Speed|"); Serial.print(stepperSpeed); Serial.print(" Accel:"); Serial.println(stepperAccel);
   Serial.println("Current Position:" + savedPosition);
 }
 
+
+
 bool configMatch() {
-  byte grabbedVersion;
-  EEPROM.get(2,grabbedVersion);
-
-  if (grabbedVersion == configVersion) {
-
+  if (returnConfigVersion() == configVersion) {
     Serial.println("Config Match");
     return true;
   } else {
