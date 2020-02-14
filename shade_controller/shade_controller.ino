@@ -53,6 +53,7 @@ byte lastPosition = 2; //Storing a starting value
 #endif
 
 bool configSaveFlag = false;
+bool firstRun = true;
 long int stepPosition = 0;
 int connectAttempt = 0;
 long int posNow = 0;
