@@ -113,6 +113,7 @@ void blynkConfig (){
 void blynkRun() {
   if (Blynk.connected() == true) {
     Blynk.run();
+    sendBlynk();
     if (connectTimeout != 0) {
       connectAttempt = 0; //Reset timeout counter if successfully connected
     }
@@ -129,7 +130,7 @@ void blynkRun() {
    timer1.run(); //Blynk RTC
  #endif
  
-  sendBlynk();
+  
   stepPosition = posNow + stepper.distanceToGo();
 }
 
