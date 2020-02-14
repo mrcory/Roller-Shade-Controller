@@ -180,5 +180,6 @@ void checkInvert() {
     for (int i=1;i<3;i++) {
       shade[i] = shade[i]*-1;
     }
+    invertMotor[1] = invertMotor[0]; //Set change flag
   }
 }
