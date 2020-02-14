@@ -14,7 +14,7 @@
 
 //version 2.5.0
 //Latest tested : 
-const byte configVersion = 1; //This will prevent loading an old config from EEPROM
+const byte configVersion = 2; //This will prevent loading an old config from EEPROM
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
@@ -87,6 +87,7 @@ bool pwmOld = false;
 int  oldBrightness = ledBrightness;
 int  pwmBrightness = 0;
 int  pwmBrightnessOut = 0;
+int  oldPWMBrightness = 0;
 
 
 
@@ -245,6 +246,7 @@ void loop() {
 
 
   oldBrightness = ledBrightness;
+  oldPWMBrightness = pwmBrightness;
   currentDistance = stepper.distanceToGo();
   checkInvert();
   ArduinoOTA.handle();
@@ -284,12 +286,6 @@ void loop() {
       FastLED.show();
    }
 
-   if (lightMode == 0) {
-    if (pwmBrightness != oldBrightness) {
-      analogWrite(PWM_PIN,pwmBrightnessOut);
-      oldBrightness = pwmBrightnessOut;
-    }
-   }
   }
 
   #ifdef stepperNema

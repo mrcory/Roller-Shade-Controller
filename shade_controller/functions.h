@@ -27,6 +27,8 @@ void configSave() {
   i+=sizeof(invertMotor[0]);
   EEPROM.put(i,oldBrightness);
   i+=sizeof(oldBrightness);
+  EEPROM.put(i,oldPWMBrightness);
+  i+=sizeof(oldPWMBrightness);
   EEPROM.commit();
   Serial.println("Config Saved");
 }
@@ -47,6 +49,8 @@ void configLoad() {
   i+=sizeof(invertMotor);
   EEPROM.get(i,oldBrightness);
   i+=sizeof(oldBrightness);
+  EEPROM.get(i,oldPWMBrightness);
+  i+=sizeof(oldPWMBrightness);
   delay(20);
   Serial.print("Config Loaded | Version "); Serial.println(returnConfigVersion());
   Serial.print("Stepper: Speed|"); Serial.print(stepperSpeed[2]); Serial.print(" Accel:"); Serial.println(stepperAccel);

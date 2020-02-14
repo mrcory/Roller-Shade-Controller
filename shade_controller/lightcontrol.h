@@ -28,12 +28,35 @@ void lightControl() {
   if (lightMode == 0) {
     if (pwmOn == false || pwmBrightness == 0) {
       pwmBrightnessOut = 0;
+      analogWrite(PWM_PIN,pwmBrightnessOut);
     }
-    if (pwmOn == true && pwmBrightness != pwmBrightnessOut) {
-      pwmBrightnessOut = pwmBrightness;
-    }
+
+
+    
+  if (pwmOn == true && pwmBrightness != pwmBrightnessOut) {
+    pwmBrightnessOut = pwmBrightness;
+    analogWrite(PWM_PIN,pwmBrightnessOut);
   }
 
-//------LED Strip
+  if (pwmOn == false && pwmBrightness != oldPWMBrightness) { //If brightness is adjusted when light is turned off, turn it on.
+    pwmOn = true;
+  }
+
+   if (pwmOn == true && pwmBrightness == 0) { //If slider is turned to 0, turn off the light button.
+     pwmOn = false;
+   }
   
+  }
+
+
+/*
+  if (lightMode == 0) {
+    if (pwmBrightness != pwmBrightnessOut) {
+      analogWrite(PWM_PIN,pwmBrightnessOut);
+      //oldBrightness = pwmBrightnessOut;
+    }
+   }
+
+//------LED Strip
+  */
 }
