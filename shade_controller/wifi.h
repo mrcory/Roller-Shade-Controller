@@ -3,6 +3,8 @@
 
 void sendBlynk() { //Blynk Feedback
   Blynk.virtualWrite(V1,stepper.currentPosition());
+  Blynk.virtualWrite(V27,pwmBrightness);
+  Blynk.virtualWrite(V28,pwmOn);
 
   if (firstRun == true) {
     Blynk.virtualWrite(V11,shade[4]);
