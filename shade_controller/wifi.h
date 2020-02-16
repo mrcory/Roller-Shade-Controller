@@ -7,20 +7,22 @@ void sendBlynk() { //Blynk Feedback
   if (oldPWMBrightness != pwmBrightness) {
     Blynk.virtualWrite(V27,pwmBrightness);
   }
-  if ( pwmOld != pwmOn) { 
-    Blynk.virtualWrite(V28,pwmOn);
-  }
+  
+  Blynk.virtualWrite(V28,pwmOn);
+      
+
   
   if (firstRun == true) {
     Blynk.virtualWrite(V11,shade[4]);
     Blynk.virtualWrite(V26,pulseMax);
     Blynk.virtualWrite(V27,pwmBrightness);
     Blynk.virtualWrite(V30,stepperSpeed[0]);
+    Blynk.virtualWrite(V34,stepperSpeed[1]);
     Blynk.virtualWrite(V31,stepperAccel);
     Blynk.virtualWrite(V32,invertMotor[1]);
-    Blynk.virtualWrite(V34,stepperSpeed[1]);
     firstRun = false;
   }
+
 }
 
 

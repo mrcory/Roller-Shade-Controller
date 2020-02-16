@@ -16,6 +16,7 @@
 //Latest tested : 
 const byte configVersion = 1; //This will prevent loading an old config from EEPROM
 
+
 #include <AccelStepper.h>
 #include <EEPROM.h>
 
@@ -90,9 +91,6 @@ int  oldBrightness = ledBrightness;
 int  pwmBrightness = 0;
 int  pwmBrightnessOut = 0;
 int  oldPWMBrightness = 0;
-
-
-
 
 #include "wifi.h"
 #include "functions.h"
@@ -217,8 +215,11 @@ void setup() {
 
   EEPROM.begin(eepromSize); //Initialize the EEPROM with our selected size
 
-  if (EEPROM.read(0) == 1 && configMatch()) { //If flagged in EEPROM; we load our current position
+  if (returnConfigVersion() == configVersion) { //If flagged in EEPROM; we load our current position
     configLoad();
+  } else {
+    configSave(); //Save default values to EEPROM if versions do not match
+    Serial.println("Default Config Saved");
   }
 
 
@@ -246,9 +247,9 @@ void setup() {
 
 void loop() {
 
-
   oldBrightness = ledBrightness;
   oldPWMBrightness = pwmBrightness;
+  pwmOld = pwmOn;
   currentDistance = stepper.distanceToGo();
   checkInvert();
   ArduinoOTA.handle();
@@ -271,6 +272,8 @@ void loop() {
     if (timer(0,blynkRefresh)) { //Run blyk every other cycle
          blynkRun();        //Only run blynk when the stepper is not active
     }
+
+    Blynk.virtualWrite(V5,returnConfigVersion());
    
 
     if (setHome == true) {

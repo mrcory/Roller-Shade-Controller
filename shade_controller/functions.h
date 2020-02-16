@@ -1,9 +1,9 @@
-
+#define eepromStart 10
 
 
 byte returnConfigVersion() {
   byte grabbedVersion;
-  EEPROM.get(2,grabbedVersion);
+  EEPROM.get(eepromStart,grabbedVersion);
   return grabbedVersion;
 }
 
@@ -11,8 +11,9 @@ byte returnConfigVersion() {
 void configSave() {
   //Position 400 is reserved for the blynk token
   EEPROM.write(0,1); //Flag for autoload
-  EEPROM.put(2,configVersion);
-  int i=10;
+  int i=eepromStart;
+  EEPROM.put(i,configVersion);
+  i+=sizeof(configVersion);
   EEPROM.put(i,savedPosition);
   i+=sizeof(savedPosition);
   EEPROM.put(i,lastPosition);
@@ -34,8 +35,10 @@ void configSave() {
 }
 
 void configLoad() {
-  int i=10;
-  EEPROM.get(5,savedPosition);
+  int i=eepromStart;
+  EEPROM.get(i,configVersion);
+  i+=sizeof(configVersion);
+  EEPROM.get(i,savedPosition);
   i+=sizeof(savedPosition);
   EEPROM.get(i,lastPosition);
   i+=sizeof(lastPosition);
@@ -215,6 +218,9 @@ void checkInvert() {
       shade[i] = shade[i]*-1;
     }
     invertMotor[1] = invertMotor[0]; //Set change flag
+    int _tempHold = stepperSpeed[0];
+    stepperSpeed[0] = stepperSpeed[1];
+    stepperSpeed[1] = _tempHold;
     configSave();
     Serial.print("Direction ");
       if (invertMotor[1] == true) {

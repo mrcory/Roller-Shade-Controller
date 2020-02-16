@@ -46,6 +46,9 @@ bool invertMotor[2] = {false};
 int connectTimeout = 100;        // How many attempts can we make before giving up on Blynk
 #define blynkRtcInterval = 30;   // How often to sync the time. (Would be used for timers)
 
+//Future option to use sketch without Blynk
+#define useBlynk
+
 #include "blynk.h" //Contains Blynk login
 
 //Comment the below line to disable Blynk Serail feedback
