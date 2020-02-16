@@ -3,9 +3,14 @@
 
 void sendBlynk() { //Blynk Feedback
   Blynk.virtualWrite(V1,stepper.currentPosition());
-  Blynk.virtualWrite(V27,pwmBrightness);
-  Blynk.virtualWrite(V28,pwmOn);
-
+  
+  if (oldPWMBrightness != pwmBrightness) {
+    Blynk.virtualWrite(V27,pwmBrightness);
+  }
+  if ( pwmOld != pwmOn) { 
+    Blynk.virtualWrite(V28,pwmOn);
+  }
+  
   if (firstRun == true) {
     Blynk.virtualWrite(V11,shade[4]);
     Blynk.virtualWrite(V26,pulseMax);
