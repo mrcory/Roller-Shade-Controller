@@ -1,30 +1,15 @@
-
+bool firstRun = true;
 
 
 void sendBlynk() { //Blynk Feedback
   Blynk.virtualWrite(V1,stepper.currentPosition());
-  
-  if (oldPWMBrightness != pwmBrightness) {
-    Blynk.virtualWrite(V27,pwmBrightness);
-  }
-  
-  Blynk.virtualWrite(V28,pwmOn);
-      
 
-  
+
   if (firstRun == true) {
-    Blynk.virtualWrite(V11,shade[4]);
-    Blynk.virtualWrite(V26,pulseMax);
-    Blynk.virtualWrite(V27,pwmBrightness);
-    Blynk.virtualWrite(V30,stepperSpeed[0]);
-    Blynk.virtualWrite(V34,stepperSpeed[1]);
-    Blynk.virtualWrite(V31,stepperAccel);
-    Blynk.virtualWrite(V32,invertMotor[1]);
+    Blynk.virtualWrite(V32,mInvert.is);
     firstRun = false;
   }
-
 }
-
 
 BLYNK_WRITE(V11) {
   shade[4] = map(param.asInt(),0,10,shade[0],shade[3]);
@@ -78,24 +63,6 @@ BLYNK_WRITE(V28) {
 }
 
 
-//------Configure device via Blynk
-
-BLYNK_WRITE(V30) { //Speed
-  stepperSpeed[0] = param.asInt();
-}
-
-BLYNK_WRITE(V31) { //Acceleration
-  stepperAccel = param.asInt();
-}
-
 BLYNK_WRITE(V32) { //Invert direction
-  invertMotor[0] = param.asInt();
-}
-
-BLYNK_WRITE(V33) { //Reset device for inverted setting
-  configSaveFlag = param.asInt();
-}
-
-BLYNK_WRITE(V34) {
-  stepperSpeed[1] = param.asInt();
+  mInvert.set = param.asInt();
 }

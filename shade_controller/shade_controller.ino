@@ -2,8 +2,7 @@
  * Created by: Cory McGahee
  * Free for non-commercial use only
  * 
- * Designed for use with my 3D printed roller shade.
- * https://www.thingiverse.com/thing:3628982
+ * Designed for use with my 3D printed roller shade. (Not yet published)
  * 
  * 
  * Serial Commands
@@ -12,10 +11,10 @@
  * rst        | Reset home position to 0
  */
 
-//version 2.5.0
-//Latest tested : 
-const byte configVersion = 1; //This will prevent loading an old config from EEPROM
+//version 2.0.0
+const int configVersion = 1;
 
+#include "structs.h"
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
@@ -25,17 +24,17 @@ long currentDistance = 0;
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 #include <Ethernet.h>
+
 #include "config.h"
-#include "timer.h"
+
+
+
 
 //ArduinoOTA
 #include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include "ota.h"
-
-WidgetTerminal terminal(V1);
-
 
 //FastLED Setup
 #include <FastLED.h>
@@ -51,19 +50,16 @@ CRGB leds[NUM_LEDS];
 
 byte lastPosition = 2; //Storing a starting value
 
-
-
 //Configure AccelStepper
 #ifdef stepperMini
-    AccelStepper stepper(ctrlType, mtrPin4,mtrPin3,mtrPin2,mtrPin1);
+  AccelStepper stepper(ctrlType, mtrPin1,mtrPin2,mtrPin3,mtrPin4);
 #endif
  
 #ifdef stepperNema
   AccelStepper stepper = AccelStepper(ctrlType, stepPin, dirPin);
 #endif
 
-bool configSaveFlag = false;
-bool firstRun = true;
+
 long int stepPosition = 0;
 int connectAttempt = 0;
 long int posNow = 0;
@@ -81,20 +77,19 @@ bool pulse = false; //Basic effect
 
 bool lightOn = false;
 bool lightOld = true; 
-
+int oldBrightness = ledBrightness;
 int currentColor[3] = {255,255,255};
 int pulseSpeed = 2;
 
 bool pwmOn = false;
-bool pwmOld = false; 
-int  oldBrightness = ledBrightness;
+bool pwmOld = false;
 int  pwmBrightness = 0;
-int  pwmBrightnessOut = 0;
-int  oldPWMBrightness = 0;
+
+
+
 
 #include "wifi.h"
 #include "functions.h"
-#include "lightcontrol.h"
 
 
 #if buttonEnable //Enable physical buttons
@@ -180,7 +175,10 @@ int  oldPWMBrightness = 0;
 
 
 void setup() {
-  timerSetup();
+
+
+
+  
   analogWrite(PWM_PIN,0);
   
   if (lightMode == 1) { //Use FastLED if selected
@@ -209,17 +207,13 @@ void setup() {
   Serial.begin(115200);
   Serial.println("");
   delay(50);
-  
   blynkConfig();
   setupOTA();
 
   EEPROM.begin(eepromSize); //Initialize the EEPROM with our selected size
 
-  if (returnConfigVersion() == configVersion) { //If flagged in EEPROM; we load our current position
+  if (EEPROM.read(0) == 1) { //If flagged in EEPROM; we load our current position
     configLoad();
-  } else {
-    configSave(); //Save default values to EEPROM if versions do not match
-    Serial.println("Default Config Saved");
   }
 
 
@@ -229,8 +223,8 @@ void setup() {
     setSyncInterval(blynkRtcInterval);
   #endif
   
-  stepper.setMaxSpeed(stepperSpeed[2]);
-  stepper.setAcceleration(stepperAccel);
+  stepper.setMaxSpeed(mSpeed.up);
+  stepper.setAcceleration(mSpeed.accel);
 
   stepper.setCurrentPosition(savedPosition);
 
@@ -242,17 +236,15 @@ void setup() {
   if (lightMode == 1) { //Use FastLED if selected
     FastLED.setBrightness(ledBrightness);
   }
+
 } //END SETUP
 
 
 void loop() {
 
+
   oldBrightness = ledBrightness;
-  oldPWMBrightness = pwmBrightness;
-  pwmOld = pwmOn;
   currentDistance = stepper.distanceToGo();
-  checkInvert();
-  ArduinoOTA.handle();
    
   if (ledFeedback == true) {
     ledFeedbackf();
@@ -269,12 +261,7 @@ void loop() {
 
   //If not moving, run extra features
   if (stepper.distanceToGo() == 0) {
-    if (timer(0,blynkRefresh)) { //Run blyk every other cycle
-         blynkRun();        //Only run blynk when the stepper is not active
-    }
-
-    Blynk.virtualWrite(V5,returnConfigVersion());
-   
+    blynkRun(); //Only run blynk when the stepper is not active
 
     if (setHome == true) {
       resetHold(); //Set current position as home
@@ -291,6 +278,12 @@ void loop() {
       FastLED.show();
    }
 
+   if (lightMode == 0) {
+    if (pwmBrightness != pwmOld) {
+      analogWrite(PWM_PIN,pwmBrightness);
+      pwmOld = pwmBrightness;
+    }
+   }
   }
 
   #ifdef stepperNema
@@ -298,11 +291,46 @@ void loop() {
   #endif
   
   stepper.run(); //AccelStepper runs here
-  
   motorControl();
-
-  if (configSaveFlag == true) {
-    configSave();
-  }
+  ArduinoOTA.handle();
   
 } //END LOOP
+
+
+
+void lightControl() {
+  
+  if (lightMode == 1) { //Use FastLED if selected
+    if (lightOn == true) {
+      fill_solid(leds,NUM_LEDS,CRGB(currentColor[0],currentColor[1],currentColor[2]));
+    }
+  
+    if (lightOn == false && lightOld != lightOn) {
+      fill_solid(leds,NUM_LEDS,CRGB(0,0,0));
+    }
+    lightOld = lightOn;
+  
+    static bool _direction = false; //Flag for fade direction
+  
+    if (pulse == true) {
+      if (timerFunc(pulseSpeed)) {
+        if (_direction == true) {
+          if (ledBrightness < pulseMax) { ledBrightness+=2; } else {_direction = false;}
+        }
+  
+        if (_direction  == false) {
+          if (ledBrightness > 5) { ledBrightness-=2; } else {_direction = true;}
+        }    
+      }
+    }
+  }
+
+  if (lightMode == 0) {
+    if (pwmOn == false && pwmBrightness > 0) {
+      pwmBrightness = 0;
+    }
+  }
+
+//------LED Strip
+  
+}

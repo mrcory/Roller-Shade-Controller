@@ -1,11 +1,12 @@
 void setupOTA() {
   ArduinoOTA.onError([](ota_error_t error) { ESP.restart(); });
   ArduinoOTA.setPassword("admin");
-  ArduinoOTA.setHostname(myHostname);
+  ArduinoOTA.setHostname("Shade");
 
 
   ArduinoOTA.onStart([]() {
     String type;
+    
     if (ArduinoOTA.getCommand() == U_FLASH) {
       type = "sketch";
     } else { // U_SPIFFS
@@ -34,7 +35,10 @@ void setupOTA() {
     } else if (error == OTA_END_ERROR) {
       Serial.println("End Failed");
     }
+
   });
+  
   ArduinoOTA.begin();
+  Serial.println("OTA");
   
 }

@@ -1,77 +1,30 @@
-#define eepromStart 10
-
-
-byte returnConfigVersion() {
-  byte grabbedVersion;
-  EEPROM.get(eepromStart,grabbedVersion);
-  return grabbedVersion;
-}
 
 
 void configSave() {
   //Position 400 is reserved for the blynk token
   EEPROM.write(0,1); //Flag for autoload
-  int i=eepromStart;
-  EEPROM.put(i,configVersion);
-  i+=sizeof(configVersion);
+  int i=5;
   EEPROM.put(i,savedPosition);
   i+=sizeof(savedPosition);
   EEPROM.put(i,lastPosition);
   i+=sizeof(lastPosition);
-  EEPROM.put(i,stepperAccel);
-  i+=sizeof(stepperAccel);
-  EEPROM.put(i,stepperSpeed[0]);
-  i+=sizeof(stepperSpeed[0]);
-  EEPROM.put(i,stepperSpeed[1]);
-  i+=sizeof(stepperSpeed[1]);
-  EEPROM.put(i,invertMotor[0]);
-  i+=sizeof(invertMotor[0]);
-  EEPROM.put(i,oldBrightness);
-  i+=sizeof(oldBrightness);
-  EEPROM.put(i,oldPWMBrightness);
-  i+=sizeof(oldPWMBrightness);
+  EEPROM.put(i,mInvert.is);
+  i+=sizeof(mInvert.is);
   EEPROM.commit();
   Serial.println("Config Saved");
 }
 
 void configLoad() {
-  int i=eepromStart;
-  EEPROM.get(i,configVersion);
-  i+=sizeof(configVersion);
-  EEPROM.get(i,savedPosition);
+  int i=5;
+  EEPROM.get(5,savedPosition);
   i+=sizeof(savedPosition);
   EEPROM.get(i,lastPosition);
   i+=sizeof(lastPosition);
-  EEPROM.get(i,stepperAccel);
-  i+=sizeof(stepperAccel);
-  EEPROM.get(i,stepperSpeed[0]);
-  i+=sizeof(stepperSpeed[0]);
-  EEPROM.get(i,stepperSpeed[1]);
-  i+=sizeof(stepperSpeed[1]);
-  EEPROM.get(i,invertMotor[0]);
-  i+=sizeof(invertMotor);
-  EEPROM.get(i,oldBrightness);
-  i+=sizeof(oldBrightness);
-  EEPROM.get(i,oldPWMBrightness);
-  i+=sizeof(oldPWMBrightness);
-  delay(20);
-  Serial.print("Config Loaded | Version "); Serial.println(returnConfigVersion());
-  Serial.print("Stepper: Speed|"); Serial.print(stepperSpeed[2]); Serial.print(" Accel:"); Serial.println(stepperAccel);
-  Serial.println("Current Position:" + savedPosition);
+  EEPROM.get(i,mInvert.is);
+  i+=sizeof(mInvert.is);
+  Serial.println("Config Loaded");
+  Serial.println(savedPosition);
 }
-
-
-
-bool configMatch() {
-  if (returnConfigVersion() == configVersion) {
-    Serial.println("Config Match");
-    return true;
-  } else {
-    Serial.println("Config Mismatch");
-    return false;
-  }
-}
-
 
 void ledFeedbackf() {
 
@@ -120,7 +73,6 @@ void blynkConfig (){
 void blynkRun() {
   if (Blynk.connected() == true) {
     Blynk.run();
-    sendBlynk();
     if (connectTimeout != 0) {
       connectAttempt = 0; //Reset timeout counter if successfully connected
     }
@@ -137,24 +89,43 @@ void blynkRun() {
    timer1.run(); //Blynk RTC
  #endif
  
-  
+  sendBlynk();
   stepPosition = posNow + stepper.distanceToGo();
 }
 
 
-void speedCheck() { //Set speed based oin direction
+void speedCheck() { //Set speed based on direction
   if (lastPosition < motorPos) {
-    stepper.setMaxSpeed(stepperSpeed[1]); //Down Speed
-    Serial.print("Speed set to "); Serial.println(stepperSpeed[1]);
+    stepper.setMaxSpeed(mSpeed.dn); //Down Speed
+    Serial.print("Speed set to "); Serial.println(mSpeed.dn);
   } else {
-    stepper.setMaxSpeed(stepperSpeed[0]); //Up Speed
-    Serial.print("Speed set to "); Serial.println(stepperSpeed[0]);
+    stepper.setMaxSpeed(mSpeed.up); //Up Speed
+    Serial.print("Speed set to "); Serial.println(mSpeed.up);
   }
   stepper.setAcceleration(stepperAccel);  //Update acceleration
 }
 
+void checkInvert() {
+  if (mInvert.is != mInvert.set) {
+    for (int i=1;i<=3;i++) {
+      shade[i] = shade[i]*-1;
+    }
+    mInvert.is = mInvert.set; //Set change flag
+    int _tempHold = mSpeed.up;
+    mSpeed.up = mSpeed.dn;
+    mSpeed.dn = _tempHold;
+    configSave();
+    Serial.print("Direction ");
+      if (mInvert.is == true) {
+        Serial.println("Inverted"); 
+      } else {
+        Serial.println("Reverted");
+      }
+  }
+}
 
 void motorControl() {
+  checkInvert(); //Check if speeds need to be reversed
 
   //If motor has reached it's target location, run this
   if (stepper.distanceToGo() == 0) {
@@ -178,7 +149,6 @@ void motorControl() {
     if (motorPos == 3) {stepper.moveTo(shade[2]);}
     if (motorPos == 4) {stepper.moveTo(shade[3]);}
     if (motorPos == 5) {stepper.moveTo(shade[4]);}
-    
     Serial.println(F("Blynk Move"));
 
     lastPosition = motorPos; //Before reseting motorPos, save a copy to lastPosition
@@ -212,21 +182,13 @@ void motorControl() {
   }
 #endif
 
-void checkInvert() {
-  if (invertMotor[0] != invertMotor[1]) {
-    for (int i=1;i<=3;i++) {
-      shade[i] = shade[i]*-1;
-    }
-    invertMotor[1] = invertMotor[0]; //Set change flag
-    int _tempHold = stepperSpeed[0];
-    stepperSpeed[0] = stepperSpeed[1];
-    stepperSpeed[1] = _tempHold;
-    configSave();
-    Serial.print("Direction ");
-      if (invertMotor[1] == true) {
-        Serial.println("Inverted"); 
-      } else {
-        Serial.println("Reverted");
-      }
+unsigned long timer = millis();
+
+bool timerFunc(int _comp) {
+  if (millis() - timer >= _comp) {
+    return true;
+    timer = millis();
+  } else {
+    return false;
   }
 }
