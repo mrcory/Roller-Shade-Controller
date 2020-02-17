@@ -256,7 +256,7 @@ void setup() {
 void loop() {
 
 
-  pwm.old = ledBrightness;
+  pwm.old = pwm.set;
   currentDistance = stepper.distanceToGo();
    
   if (ledFeedback == true) {
