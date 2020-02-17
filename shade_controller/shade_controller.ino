@@ -13,7 +13,7 @@
 
  #define BLYNK_PRINT Serial
 
-//version 2.5.1
+//version 2.6.0
 const int configVersion = 3;
 
 #include "structs.h"
