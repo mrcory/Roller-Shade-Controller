@@ -24,3 +24,14 @@ struct pwmStruct {
   bool onOld;
   int out;
 };
+
+//FastLED Struct
+struct fastLED {
+  bool on;
+  bool onOld;
+  int set;
+  int out;
+  int hue;
+  int sat;
+  int val;
+}
