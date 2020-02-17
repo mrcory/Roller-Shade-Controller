@@ -2,8 +2,8 @@
  * Created by: Cory McGahee
  * Free for non-commercial use only
  * 
- * Designed for use with my 3D printed roller shade. (Not yet published)
- * 
+ * Designed for use with my 3D printed roller shade.
+ * https://www.thingiverse.com/thing:3628982
  * 
  * Serial Commands
  * move <val> | Absolute move in steps
