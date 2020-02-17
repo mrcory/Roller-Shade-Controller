@@ -1,11 +1,25 @@
 bool firstRun = true;
 
+bool resetFlag = false;
+bool configLoadFlag = false;
+bool configSaveFlag = false;
+
 
 void sendBlynk() { //Blynk Feedback
   Blynk.virtualWrite(V1,stepper.currentPosition());
 
+  if (pwm.old != pwm.set) {
+    Blynk.virtualWrite(V27,pwm.set);
+    Blynk.virtualWrite(V28,pwm.on);
+  }
+
 
   if (firstRun == true) {
+    Blynk.virtualWrite(V11,shade[4]);
+    Blynk.virtualWrite(V27,pwm.set);
+    Blynk.virtualWrite(V30,mSpeed.up);
+    Blynk.virtualWrite(V31,mSpeed.accel);
+    Blynk.virtualWrite(V34,mSpeed.dn);
     Blynk.virtualWrite(V32,mInvert.is);
     firstRun = false;
   }
@@ -55,14 +69,37 @@ BLYNK_WRITE(V26) {
 }
 
 BLYNK_WRITE(V27) {
-  pwmBrightness = param.asInt();
+  pwm.set = param.asInt();
 }
 
 BLYNK_WRITE(V28) {
-  pwmOn = param.asInt();
+  pwm.on = param.asInt();
 }
 
+BLYNK_WRITE(V30) {
+  mSpeed.up = param.asInt();
+}
+
+BLYNK_WRITE(V31) {
+  mSpeed.accel = param.asInt();
+}
 
 BLYNK_WRITE(V32) { //Invert direction
   mInvert.set = param.asInt();
+}
+
+BLYNK_WRITE(V33) {
+  configSaveFlag = param.asInt();
+}
+
+BLYNK_WRITE(V34) {
+  mSpeed.dn = param.asInt();
+}
+
+BLYNK_WRITE(V35) {
+ resetFlag = param.asInt(); 
+}
+
+BLYNK_WRITE(V36) {
+  configLoadFlag = param.asInt();
 }

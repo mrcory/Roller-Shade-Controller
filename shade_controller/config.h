@@ -9,9 +9,7 @@
  * 
  * .! This is used for both motor types !.
  */
-#define stepperSpeed 1100.0 //Max Speed
-#define stepperAccel 175.0  //Acceleration Rate
-
+ 
 motorSpeedStruct mSpeed = {
   1000, //Up Speed
   1000, //Down Speed
@@ -42,8 +40,6 @@ int connectTimeout = 100;      // How many attempts can we make before giving up
 
 #include "blynk.h" //Contains Blynk login
 
-//Comment the below line to disable Blynk Serail feedback
-#define BLYNK_PRINT Serial
 
 //------Timer
 int stepperPos[] = {0,6000};
@@ -101,7 +97,7 @@ int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it wil
 
 //FastLED Settings
 #define NUM_LEDS 9         //Number of attached LEDs
-#define DATA_PIN    D1     //Communication pin for the LEDs | Same pin will be used for either LED control
+#define DATA_PIN    D2     //Communication pin for the LEDs | Same pin will be used for either LED control
 #define LED_TYPE    WS2812 //LED controller
 #define COLOR_ORDER GRB    //Order to send colors
 

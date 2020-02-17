@@ -11,8 +11,10 @@
  * rst        | Reset home position to 0
  */
 
-//version 2.0.0
-const int configVersion = 1;
+ #define BLYNK_PRINT Serial
+
+//version 2.5.1
+const int configVersion = 3;
 
 #include "structs.h"
 
@@ -24,7 +26,6 @@ long currentDistance = 0;
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
 #include <Ethernet.h>
-
 #include "config.h"
 
 
@@ -77,15 +78,21 @@ bool pulse = false; //Basic effect
 
 bool lightOn = false;
 bool lightOld = true; 
-int oldBrightness = ledBrightness;
+//int oldBrightness = ledBrightness;
 int currentColor[3] = {255,255,255};
 int pulseSpeed = 2;
 
-bool pwmOn = false;
-bool pwmOld = false;
-int  pwmBrightness = 0;
+//bool pwmOn = false;
+//bool pwmOld = false;
+//int  pwmBrightness = 0;
 
-
+pwmStruct pwm = {
+  ledBrightness, //old
+  0, //set
+  false, //on
+  false, //onOld
+  0 //out
+};
 
 
 #include "wifi.h"
@@ -144,8 +151,8 @@ int  pwmBrightness = 0;
     }
 
     if (lightMode == 0) {
-      pwmOn = !pwmOn;
-      pwmBrightness = ledButtonBrightness;
+      pwm.on = !pwm.on;
+      pwm.set = ledButtonBrightness;
     }
     
     ledTurn(1);
@@ -154,6 +161,7 @@ int  pwmBrightness = 0;
   void resetHold() {
     Serial.println("Rst Hold");
     stepper.setCurrentPosition(0);
+    configSave();
     ledTurn(1);
   }
 
@@ -172,10 +180,12 @@ int  pwmBrightness = 0;
   BlynkTimer timer1;
 #endif
 
-
+#include "lightcontrol.h"
 
 void setup() {
-
+  Serial.begin(74880);
+  Serial.println("dsadsadaas");
+  delay(50);
 
 
   
@@ -204,16 +214,19 @@ void setup() {
 
   
 
-  Serial.begin(115200);
-  Serial.println("");
-  delay(50);
+  
   blynkConfig();
   setupOTA();
 
   EEPROM.begin(eepromSize); //Initialize the EEPROM with our selected size
 
-  if (EEPROM.read(0) == 1) { //If flagged in EEPROM; we load our current position
+  if (EEPROM.read(0) == 1 && returnConfigVersion() == configVersion) { //If flagged in EEPROM; we load our current position
     configLoad();
+    Serial.println("Pass Config Version Check");
+  } else {
+    Serial.println("Fail Config Version Check, Reseting To Default");
+    configSave();
+    
   }
 
 
@@ -243,7 +256,7 @@ void setup() {
 void loop() {
 
 
-  oldBrightness = ledBrightness;
+  pwm.old = ledBrightness;
   currentDistance = stepper.distanceToGo();
    
   if (ledFeedback == true) {
@@ -271,7 +284,7 @@ void loop() {
     lightControl();
 
     if (lightMode == 1) { //Use FastLED if selected
-      if (ledBrightness != oldBrightness) {
+      if (ledBrightness != pwm.old) {
         FastLED.setBrightness(ledBrightness);
       }
   
@@ -279,9 +292,9 @@ void loop() {
    }
 
    if (lightMode == 0) {
-    if (pwmBrightness != pwmOld) {
-      analogWrite(PWM_PIN,pwmBrightness);
-      pwmOld = pwmBrightness;
+    if (pwm.set != pwm.onOld) {
+      analogWrite(PWM_PIN,pwm.set);
+      pwm.onOld = pwm.set;
     }
    }
   }
@@ -294,43 +307,18 @@ void loop() {
   motorControl();
   ArduinoOTA.handle();
   
+  if (resetFlag == true) {
+    ESP.reset();
+  }
+
+  if (configLoadFlag == true) {
+    configLoad();
+    configLoadFlag = false;
+  }
+
+  if (configSaveFlag == true) {
+    configSave();
+    configSaveFlag = false;
+  }
+  
 } //END LOOP
-
-
-
-void lightControl() {
-  
-  if (lightMode == 1) { //Use FastLED if selected
-    if (lightOn == true) {
-      fill_solid(leds,NUM_LEDS,CRGB(currentColor[0],currentColor[1],currentColor[2]));
-    }
-  
-    if (lightOn == false && lightOld != lightOn) {
-      fill_solid(leds,NUM_LEDS,CRGB(0,0,0));
-    }
-    lightOld = lightOn;
-  
-    static bool _direction = false; //Flag for fade direction
-  
-    if (pulse == true) {
-      if (timerFunc(pulseSpeed)) {
-        if (_direction == true) {
-          if (ledBrightness < pulseMax) { ledBrightness+=2; } else {_direction = false;}
-        }
-  
-        if (_direction  == false) {
-          if (ledBrightness > 5) { ledBrightness-=2; } else {_direction = true;}
-        }    
-      }
-    }
-  }
-
-  if (lightMode == 0) {
-    if (pwmOn == false && pwmBrightness > 0) {
-      pwmBrightness = 0;
-    }
-  }
-
-//------LED Strip
-  
-}

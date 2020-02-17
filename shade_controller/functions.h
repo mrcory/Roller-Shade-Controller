@@ -3,6 +3,7 @@
 void configSave() {
   //Position 400 is reserved for the blynk token
   EEPROM.write(0,1); //Flag for autoload
+  EEPROM.put(3,configVersion);
   int i=5;
   EEPROM.put(i,savedPosition);
   i+=sizeof(savedPosition);
@@ -10,6 +11,16 @@ void configSave() {
   i+=sizeof(lastPosition);
   EEPROM.put(i,mInvert.is);
   i+=sizeof(mInvert.is);
+  EEPROM.put(i,pwm.set);
+  i+=sizeof(pwm.set);
+  EEPROM.put(i,mInvert.set);
+  i+=sizeof(mInvert.set);
+  EEPROM.put(i,mSpeed.up);
+  i+=sizeof(mSpeed.up);
+  EEPROM.put(i,mSpeed.dn);
+  i+=sizeof(mSpeed.dn);
+  EEPROM.put(i,mSpeed.accel);
+  i+=sizeof(mSpeed.accel);
   EEPROM.commit();
   Serial.println("Config Saved");
 }
@@ -22,6 +33,16 @@ void configLoad() {
   i+=sizeof(lastPosition);
   EEPROM.get(i,mInvert.is);
   i+=sizeof(mInvert.is);
+  EEPROM.get(i,pwm.set);
+  i+=sizeof(pwm.set);
+  EEPROM.get(i,mInvert.set);
+  i+=sizeof(mInvert.set);
+  EEPROM.get(i,mSpeed.up);
+  i+=sizeof(mSpeed.up);
+  EEPROM.get(i,mSpeed.dn);
+  i+=sizeof(mSpeed.dn);
+  EEPROM.get(i,mSpeed.accel);
+  i+=sizeof(mSpeed.accel);
   Serial.println("Config Loaded");
   Serial.println(savedPosition);
 }
@@ -102,7 +123,7 @@ void speedCheck() { //Set speed based on direction
     stepper.setMaxSpeed(mSpeed.up); //Up Speed
     Serial.print("Speed set to "); Serial.println(mSpeed.up);
   }
-  stepper.setAcceleration(stepperAccel);  //Update acceleration
+  stepper.setAcceleration(mSpeed.accel);  //Update acceleration
 }
 
 void checkInvert() {
@@ -191,4 +212,10 @@ bool timerFunc(int _comp) {
   } else {
     return false;
   }
+}
+
+byte returnConfigVersion() {
+  byte grabbedVersion;
+  EEPROM.get(3,grabbedVersion);
+  return grabbedVersion;
 }
