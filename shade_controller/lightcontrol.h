@@ -28,12 +28,6 @@ void lightControl() {
 //PWM Code ---------------------------
 
   if (lightMode == 0) {
-    if (pwm.on == false && pwm.set > 0) {
-      pwm.set = 0;
-    }
-  }
-
-  if (lightMode == 0) {
     if (pwm.on == false || pwm.set == 0) {
       pwm.out = 0;
       analogWrite(PWM_PIN,pwm.out);
