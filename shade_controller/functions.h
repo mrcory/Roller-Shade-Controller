@@ -31,7 +31,7 @@ void configLoad() {
   i+=sizeof(savedPosition);
   EEPROM.get(i,lastPosition);
   i+=sizeof(lastPosition);
-  EEPROM.get(i,mInvert.is);
+  //EEPROM.get(i,mInvert.is);
   i+=sizeof(mInvert.is);
   EEPROM.get(i,pwm.set);
   i+=sizeof(pwm.set);
