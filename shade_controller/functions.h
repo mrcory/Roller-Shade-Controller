@@ -21,6 +21,8 @@ void configSave() {
   i+=sizeof(mSpeed.dn);
   EEPROM.put(i,mSpeed.accel);
   i+=sizeof(mSpeed.accel);
+  EEPROM.put(i,ledButtonBrightness);
+  i+=sizeof(ledButtonBrightness);
   EEPROM.commit();
   Serial.println("Config Saved");
 }
@@ -43,6 +45,8 @@ void configLoad() {
   i+=sizeof(mSpeed.dn);
   EEPROM.get(i,mSpeed.accel);
   i+=sizeof(mSpeed.accel);
+  EEPROM.get(i,ledButtonBrightness);
+  i+=sizeof(ledButtonBrightness);
   Serial.println("Config Loaded");
   Serial.println(savedPosition);
 }

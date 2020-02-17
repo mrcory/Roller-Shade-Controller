@@ -7,10 +7,10 @@ bool configSaveFlag = false;
 
 void sendBlynk() { //Blynk Feedback
   Blynk.virtualWrite(V1,stepper.currentPosition());
+  Blynk.virtualWrite(V28,pwm.on);
 
   if (pwm.old != pwm.set) {
     Blynk.virtualWrite(V27,pwm.set);
-    Blynk.virtualWrite(V28,pwm.on);
   }
 
 
@@ -21,6 +21,7 @@ void sendBlynk() { //Blynk Feedback
     Blynk.virtualWrite(V31,mSpeed.accel);
     Blynk.virtualWrite(V34,mSpeed.dn);
     Blynk.virtualWrite(V32,mInvert.is);
+    Blynk.virtualWrite(V37,ledButtonBrightness);
     firstRun = false;
   }
 }
@@ -102,4 +103,8 @@ BLYNK_WRITE(V35) {
 
 BLYNK_WRITE(V36) {
   configLoadFlag = param.asInt();
+}
+
+BLYNK_WRITE(V37) {
+  ledButtonBrightness = param.asInt();
 }
