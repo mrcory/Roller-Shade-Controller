@@ -78,13 +78,8 @@ bool pulse = false; //Basic effect
 
 bool lightOn = false;
 bool lightOld = true; 
-//int oldBrightness = ledBrightness;
 int currentColor[3] = {255,255,255};
 int pulseSpeed = 2;
-
-//bool pwmOn = false;
-//bool pwmOld = false;
-//int  pwmBrightness = 0;
 
 pwmStruct pwm = {
   ledBrightness, //old
