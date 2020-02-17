@@ -292,9 +292,9 @@ void loop() {
    }
 
    if (lightMode == 0) {
-    if (pwm.set != pwm.onOld) {
+    if (pwm.set != pwm.old) {
       analogWrite(PWM_PIN,pwm.set);
-      pwm.onOld = pwm.set;
+      pwm.old = pwm.set;
     }
    }
   }
