@@ -43,4 +43,6 @@ More tools may be required to make the final product look nice, but that is _opt
 ## Known Issues
 * Due to the way that the stepper is driven Blynk will disconnect when the shade is traveling. This is because Blynk slows the code execution. I believe this is happening due to the time it takes for Blynk to communicate with the server to check for any updates. To make the stepper run smoothly Blynk.run() is not run while the stepper is active by putting it behind an if check.
 
+This issue could be fixed by using an ESP32 in the D1 Mini form factor.
+
 * The code is ugly ~~and lacks comments.~~
