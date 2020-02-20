@@ -1,6 +1,7 @@
 # Roller-Shade-Controller
 D1 Mini powered roller shade controller for my 3D printed roller shade.
-Uses a custom PCB.
+
+Intended for use with a custom PCB I designed, but can also be used with a custome protoboard. (As I did during testing.)
 
 ## Welcome to my little project!
 The purpose behind this project was two-fold. One, I want a remote controlled shade for my window, but didn't want to spend that much. Two, I wanted a small project to do to break the tedium of my working on my aquarium controller.
