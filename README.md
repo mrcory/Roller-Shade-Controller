@@ -27,13 +27,15 @@ More features, like physical button control, will add a little bit to the cost b
  1/2" EMT conduit.
 
 ### Software
-Blynk is used as a remote control for this project.
+* Blynk is used as a remote control for this project.
 
-[AccelStepper (Fork)](https://github.com/waspinator/AccelStepper) is used to actually drive the motor. _(This version is available in the library manager.)_
+* [AccelStepper (Fork)](https://github.com/waspinator/AccelStepper) is used to actually drive the motor. _(This version is available in the library manager.)_
 
-[CmdArduino](https://github.com/fakufaku/CmdArduino) is used for control of serial monitor. (A little library I really like.)
+* [CmdArduino](https://github.com/fakufaku/CmdArduino) is used for control of serial monitor. (A little library I really like.)
 
-FastLED is used to control addressable LEDs.
+* FastLED is used to control addressable LEDs.  
+
+* WiFiManager as an option to configure WiFi. (>2.7.0)
 
 ### Goal
 The goal is to make a low cost remote controlled roller shade that can be made DIY. The only tools needed are some hex wrenches, a hacksaw (band saw is also acceptable), and a 3D printer.
