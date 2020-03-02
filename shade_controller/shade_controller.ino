@@ -13,7 +13,7 @@
 
  #define BLYNK_PRINT Serial
 
-//version 2.6.0
+//version 2.7.0
 const int configVersion = 3;
 int   safeConfigVersion = 3; //The oldest version of config that can
                              //be updated from.
