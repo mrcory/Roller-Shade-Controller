@@ -15,6 +15,8 @@
 
 //version 2.6.0
 const int configVersion = 3;
+int   safeConfigVersion = 3; //The oldest version of config that can
+                             //be updated from.
 
 #include "structs.h"
 
@@ -36,6 +38,12 @@ long currentDistance = 0;
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include "ota.h"
+
+//wifiManager
+#ifdef wifiManagerEnable
+  #include <WiFiManager.h> 
+  #include <ESP8266WebServer.h>
+#endif
 
 //FastLED Setup
 #include <FastLED.h>
@@ -179,8 +187,12 @@ pwmStruct pwm = {
 
 void setup() {
   Serial.begin(74880);
-  Serial.println("dsadsadaas");
   delay(50);
+
+  #ifdef wifiManagerEnable
+    // WiFiManager intialization.
+    WiFiManager wifi; 
+  #endif
 
 
   
@@ -206,7 +218,13 @@ void setup() {
     cmdAdd("pos",pos);
   #endif
 
-
+  #ifdef wifiManagerEnable
+    // Create AP, if necessary
+    wifi.autoConnect(myHostName);
+  
+    // Set WIFI module to STA mode
+    WiFi.mode( WIFI_STA );
+  #endif
   
 
   

@@ -34,4 +34,4 @@ struct fastLED {
   int hue;
   int sat;
   int val;
-}
+};

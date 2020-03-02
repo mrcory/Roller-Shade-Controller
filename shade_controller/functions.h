@@ -91,7 +91,10 @@ void ledTurn(int _mode) {
 //We will conigure Blynk with this
 void blynkConfig (){
   Blynk.config(auth,server,port);
-  Blynk.connectWiFi(ssid,pass);
+
+  #if !(defined(wifiManagerEnabled))
+    Blynk.connectWiFi(ssid,pass);
+  #endif
 }
 
 //This will connect or run blynk

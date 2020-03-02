@@ -1,5 +1,10 @@
 //Config stuff
 
+//Uncomment to enable wifi manager
+#define wifiManagerEnable
+
+//
+
 /* Speed Settings in Steps/Second
  * You will have to play with these values to find a 
  * reliable setup. I recomend putting a small extra load
