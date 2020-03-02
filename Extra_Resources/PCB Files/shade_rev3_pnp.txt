@@ -1,0 +1,56 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=shade_rev3
+*Date=23:03:12
+*CreatedBy=Fritzing 0.9.4.2019-12-01.CD-498-0-a1ffcea
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;;28.1025;-0.986876;0;Bottom;TXT2
+2;;;12.7569;-15.2274;0;Bottom;TXT5
+3;;;15.2136;-4.90854;0;Bottom;TXT3
+4;;;13.2263;-32.5232;0;Bottom;TXT4
+5;220;THT;33.2884;-32.6608;0;Bottom;R7
+6;220;THT;48.5284;-19.3258;-90;Bottom;R2
+7;;5 mm [THT];39.8968;-26.1188;0;Bottom;LED
+8;;THT;48.5284;-4.08578;-90;Bottom;5V BUCK
+9;;THT;58.6884;-23.1358;-90;Bottom;J6
+10;220;THT;26.9384;-23.1358;-90;Bottom;R4
+11;;THT;28.2084;-4.08578;90;Bottom;J2
+12;;THT;15.5084;-2.81578;90;Bottom;VSET
+13;220;THT;45.9884;-19.3258;-90;Bottom;R1
+14;;DIP16 [THT];15.5084;-23.1358;90;Bottom;IC1
+15;;ptc;57.4184;-7.89578;180;Bottom;F2
+16;;;57.677;-2.60742;0;Bottom;Hole6
+17;;;4.33705;-2.60742;0;Bottom;Hole7
+18;;;4.33705;-38.1676;0;Bottom;Hole8
+19;;;41.2547;-3.55532;0;Bottom;TXT1
+20;;THT;15.5084;-35.8358;90;Bottom;J3
+21;;;40.2733;-16.7858;0;Bottom;Via9
+22;;THT;38.3684;-5.35578;180;Bottom;J5
+23;;;15.4543;-38.0103;0;Bottom;TXT5
+24;;;21.867;-6.62105;0;Bottom;Via5
+25;;[THT];40.1867;-16.0177;-90;Bottom;SW1
+26;;;37.0095;-10.7275;0;Bottom;TXT1
+27;;ptc;47.2584;-7.89578;180;Bottom;F1
+28;;THT;34.5584;-16.7858;0;Bottom;J1
+29;220;THT;34.5584;-37.7408;0;Bottom;R3
+30;;[THT];55.4267;-16.0177;-90;Bottom;SW2
+31;;;15.3831;-30.9782;0;Bottom;TXT4
+32;;[THT];47.8067;-31.2576;-90;Bottom;SW3
+33;;THT;12.9684;-12.9758;90;Bottom;J4
+34;;;24.4054;-6.64135;0;Bottom;Via6
+35;;;57.2832;-25.0822;0;Bottom;TXT1
+36;;cap-pth-small2;3.44339;-23.1358;90;Bottom;C1
+37;;TO220 [THT];57.6724;-32.0258;90;Bottom;Q1
+38;;;24.3983;-9.1658;0;Bottom;Via8
+39;;;57.677;-38.1676;0;Bottom;Hole5
+40;220;THT;26.9384;-9.16578;0;Bottom;R5
+41;;;6.37985;-7.05104;0;Bottom;IMG1
