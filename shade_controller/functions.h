@@ -123,13 +123,30 @@ void blynkRun() {
 
 
 void speedCheck() { //Set speed based on direction
-  if (lastPosition > motorPos) {
-    stepper.setMaxSpeed(mSpeed.up); //Down Speed
-    Serial.print("Speed set to "); Serial.println(mSpeed.dn);
+
+if (motorPos != 5) {
+  if (mInvert.set == true) {
+    if (lastPosition > motorPos) {
+      stepper.setMaxSpeed(mSpeed.up); //Down Speed
+      Serial.print("Speed set to "); Serial.println(mSpeed.dn);
+    } else {
+      stepper.setMaxSpeed(mSpeed.dn); //Up Speed
+      Serial.print("Speed set to "); Serial.println(mSpeed.up);
+    }
   } else {
-    stepper.setMaxSpeed(mSpeed.dn); //Up Speed
-    Serial.print("Speed set to "); Serial.println(mSpeed.up);
+    if (lastPosition > motorPos) {
+      stepper.setMaxSpeed(mSpeed.dn); //Down Speed
+      Serial.print("Speed set to "); Serial.println(mSpeed.dn);
+    } else {
+      stepper.setMaxSpeed(mSpeed.up); //Up Speed
+      Serial.print("Speed set to "); Serial.println(mSpeed.up);
+    }
   }
+} else {
+  stepper.setMaxSpeed(mSpeed.dn);
+}
+
+  
   stepper.setAcceleration(mSpeed.accel);  //Update acceleration
 }
 
