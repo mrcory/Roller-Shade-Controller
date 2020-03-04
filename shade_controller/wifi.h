@@ -20,7 +20,7 @@ void sendBlynk() { //Blynk Feedback
     Blynk.virtualWrite(V30,mSpeed.up);
     Blynk.virtualWrite(V31,mSpeed.accel);
     Blynk.virtualWrite(V34,mSpeed.dn);
-    Blynk.virtualWrite(V32,mInvert.is);
+    Blynk.virtualWrite(V32,mInvert.set);
     Blynk.virtualWrite(V37,ledButtonBrightness);
     firstRun = false;
   }

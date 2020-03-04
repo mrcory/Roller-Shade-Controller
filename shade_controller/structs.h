@@ -8,10 +8,12 @@ struct motorSpeedStruct {
 struct motorInvertStruct {
   bool set;
   bool is;
+  bool was;
 };
 
 //Invert Hold Variable
 motorInvertStruct mInvert = {
+  false,
   false,
   false
 };

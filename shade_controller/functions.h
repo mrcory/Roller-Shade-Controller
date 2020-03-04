@@ -9,8 +9,8 @@ void configSave() {
   i+=sizeof(savedPosition);
   EEPROM.put(i,lastPosition);
   i+=sizeof(lastPosition);
-  EEPROM.put(i,mInvert.is);
-  i+=sizeof(mInvert.is);
+  EEPROM.put(i,mInvert.was);
+  i+=sizeof(mInvert.was);
   EEPROM.put(i,pwm.set);
   i+=sizeof(pwm.set);
   EEPROM.put(i,mInvert.set);
@@ -33,8 +33,8 @@ void configLoad() {
   i+=sizeof(savedPosition);
   EEPROM.get(i,lastPosition);
   i+=sizeof(lastPosition);
-  //EEPROM.get(i,mInvert.is);
-  i+=sizeof(mInvert.is);
+  EEPROM.get(i,mInvert.was);
+  i+=sizeof(mInvert.was);
   EEPROM.get(i,pwm.set);
   i+=sizeof(pwm.set);
   EEPROM.get(i,mInvert.set);
@@ -122,25 +122,14 @@ void blynkRun() {
 }
 
 
+
 void speedCheck() { //Set speed based on direction
 
 if (motorPos != 5) {
-  if (mInvert.set == true) {
-    if (lastPosition > motorPos) {
-      stepper.setMaxSpeed(mSpeed.up); //Down Speed
-      Serial.print("Speed set to "); Serial.println(mSpeed.dn);
-    } else {
-      stepper.setMaxSpeed(mSpeed.dn); //Up Speed
-      Serial.print("Speed set to "); Serial.println(mSpeed.up);
-    }
+  if (goDown == true) {
+    stepper.setMaxSpeed(mSpeed.dn);
   } else {
-    if (lastPosition > motorPos) {
-      stepper.setMaxSpeed(mSpeed.dn); //Down Speed
-      Serial.print("Speed set to "); Serial.println(mSpeed.dn);
-    } else {
-      stepper.setMaxSpeed(mSpeed.up); //Up Speed
-      Serial.print("Speed set to "); Serial.println(mSpeed.up);
-    }
+    stepper.setMaxSpeed(mSpeed.up);
   }
 } else {
   stepper.setMaxSpeed(mSpeed.dn);
@@ -156,16 +145,14 @@ void checkInvert() {
       shade[i] = shade[i]*-1;
     }
     mInvert.is = mInvert.set; //Set change flag
-    //int _tempHold = mSpeed.up;
-    //mSpeed.up = mSpeed.dn;
-    //mSpeed.dn = _tempHold;
-    configSave();
     Serial.print("Direction ");
       if (mInvert.is == true) {
         Serial.println("Inverted"); 
       } else {
         Serial.println("Reverted");
       }
+      if (mInvert.was != mInvert.set) {mInvert.was = mInvert.set; resetFlag = true;}
+      configSave();
   }
 }
 
@@ -187,6 +174,7 @@ void motorControl() {
 
   //Blynk will set a vale to motorPos that is used to set where the motor should run to
   if (motorPos > 0) {
+    if (lastPosition < motorPos) {goDown = true;} else {goDown = false;}
     speedCheck();
     
     if (motorPos == 1) {stepper.moveTo(shade[0]);}
@@ -195,7 +183,6 @@ void motorControl() {
     if (motorPos == 4) {stepper.moveTo(shade[3]);}
     if (motorPos == 5) {stepper.moveTo(shade[4]);}
     Serial.println(F("Blynk Move"));
-
     lastPosition = motorPos; //Before reseting motorPos, save a copy to lastPosition
     motorPos = 0; //Reset motorPos
   }
