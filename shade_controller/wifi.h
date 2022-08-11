@@ -1,9 +1,3 @@
-bool firstRun = true;
-
-bool resetFlag = false;
-bool configLoadFlag = false;
-bool configSaveFlag = false;
-
 
 void sendBlynk() { //Blynk Feedback
   Blynk.virtualWrite(V1,stepper.currentPosition());

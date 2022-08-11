@@ -88,39 +88,40 @@ void ledTurn(int _mode) {
     ledMode = _mode;
 }
 
-//We will conigure Blynk with this
-void blynkConfig (){
-  Blynk.config(auth,server,port);
-
-  #if !(defined(wifiManagerEnabled))
-    Blynk.connectWiFi(ssid,pass);
-  #endif
-}
-
-//This will connect or run blynk
-void blynkRun() {
-  if (Blynk.connected() == true) {
-    Blynk.run();
-    if (connectTimeout != 0) {
-      connectAttempt = 0; //Reset timeout counter if successfully connected
-    }
-  } else {
-    if (connectAttempt < connectTimeout) {
-      Serial.print(F("[BLYNK] Attempting to connect... | Attempt #")); Serial.println(connectAttempt);
-      Blynk.connect(3000); //Attempt to connect for 3 seconds.
-      if (Blynk.connected() == true) {Serial.println(F("[BLYNK] Connected!"));}
-      connectAttempt++; //Increment timeout timer
-    }
+#ifdef Blynkenable
+  //We will conigure Blynk with this
+  void blynkConfig (){
+    Blynk.config(auth,server,port);
+  
+    #if !(defined(wifiManagerEnabled))
+      Blynk.connectWiFi(ssid,pass);
+    #endif
   }
-
-  #if rtcBlynk
-   timer1.run(); //Blynk RTC
- #endif
- 
-  sendBlynk();
-  stepPosition = posNow + stepper.distanceToGo();
-}
-
+  
+  //This will connect or run blynk
+  void blynkRun() {
+    if (Blynk.connected() == true) {
+      Blynk.run();
+      if (connectTimeout != 0) {
+        connectAttempt = 0; //Reset timeout counter if successfully connected
+      }
+    } else {
+      if (connectAttempt < connectTimeout) {
+        Serial.print(F("[BLYNK] Attempting to connect... | Attempt #")); Serial.println(connectAttempt);
+        Blynk.connect(3000); //Attempt to connect for 3 seconds.
+        if (Blynk.connected() == true) {Serial.println(F("[BLYNK] Connected!"));}
+        connectAttempt++; //Increment timeout timer
+      }
+    }
+  
+    #if rtcBlynk
+     timer1.run(); //Blynk RTC
+   #endif
+   
+    sendBlynk();
+    stepPosition = posNow + stepper.distanceToGo();
+  }
+#endif
 
 
 void speedCheck() { //Set speed based on direction

@@ -2,6 +2,9 @@
  * Created by: Cory McGahee
  * Free for non-commercial use only
  * 
+ * Home Assistant Code Based From:
+ * https://github.com/dawidchyrzynski/arduino-home-assistant/blob/main/examples/fan/fan.ino
+ * 
  * Designed for use with my 3D printed roller shade.
  * https://www.thingiverse.com/thing:3628982
  * 
@@ -11,14 +14,19 @@
  * rst        | Reset home position to 0
  */
 
- #define BLYNK_PRINT Serial
+#define BLYNK_PRINT Serial
 
-//version 2.7.0
-const int configVersion = 3;
+//version 3.0.0
+const int configVersion = 4;
 int   safeConfigVersion = 3; //The oldest version of config that can
                              //be updated from.
 
 #include "structs.h"
+
+bool firstRun = true;
+bool resetFlag = false;
+bool configLoadFlag = false;
+bool configSaveFlag = false;
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
@@ -26,8 +34,10 @@ int   safeConfigVersion = 3; //The oldest version of config that can
 long currentDistance = 0;
 
 #include <ESP8266WiFi.h>
-#include <BlynkSimpleEsp8266.h>
-#include <Ethernet.h>
+#ifdef Blynkenable0
+  #include <BlynkSimpleEsp8266.h>
+#endif
+#include <Ethernet2.h>
 #include "config.h"
 
 
@@ -98,8 +108,10 @@ pwmStruct pwm = {
   0 //out
 };
 
+#ifdef Blynkenable
+  #include "wifi.h"
+#endif
 
-#include "wifi.h"
 #include "functions.h"
 
 
@@ -177,11 +189,13 @@ pwmStruct pwm = {
   
 #endif 
 
-#if rtcBlynk //Enable the RTC feature from Blynk
-  //Blynk RTC
-  #include <WidgetRTC.h>
-  WidgetRTC RTC;
-  BlynkTimer timer1;
+#ifdef Blynkenable
+  #if rtcBlynk //Enable the RTC feature from Blynk
+    //Blynk RTC
+    #include <WidgetRTC.h>
+    WidgetRTC RTC;
+    BlynkTimer timer1;
+  #endif
 #endif
 
 #include "lightcontrol.h"
@@ -228,8 +242,9 @@ void setup() {
   #endif
   
 
-  
-  blynkConfig();
+  #ifdef Blynkenable
+    blynkConfig();
+  #endif
   setupOTA();
 
   EEPROM.begin(eepromSize); //Initialize the EEPROM with our selected size
@@ -243,11 +258,12 @@ void setup() {
     
   }
 
-
-  #if rtcBlynk
-    //Using Blynk to get the time
-    RTC.begin();
-    setSyncInterval(blynkRtcInterval);
+  #ifdef Blynkenable
+    #if rtcBlynk
+      //Using Blynk to get the time
+      RTC.begin();
+      setSyncInterval(blynkRtcInterval);
+    #endif
   #endif
   
   stepper.setMaxSpeed(mSpeed.up);
@@ -288,8 +304,11 @@ void loop() {
 
   //If not moving, run extra features
   if (stepper.distanceToGo() == 0) {
-    blynkRun(); //Only run blynk when the stepper is not active
-
+    
+    #ifdef Blynkenable
+      blynkRun(); //Only run blynk when the stepper is not active
+    #endif
+    
     if (setHome == true) {
       resetHold(); //Set current position as home
       setHome = false;
@@ -320,19 +339,19 @@ void loop() {
   stepper.run(); //AccelStepper runs here
   motorControl();
   ArduinoOTA.handle();
-  
-  if (resetFlag == true) {
-    ESP.reset();
-  }
 
-  if (configLoadFlag == true) {
-    configLoad();
-    configLoadFlag = false;
-  }
-
-  if (configSaveFlag == true) {
-    configSave();
-    configSaveFlag = false;
-  }
+    if (resetFlag == true) {
+      ESP.reset();
+    }
   
+    if (configLoadFlag == true) {
+      configLoad();
+      configLoadFlag = false;
+    }
+  
+    if (configSaveFlag == true) {
+      configSave();
+      configSaveFlag = false;
+    }
+
 } //END LOOP

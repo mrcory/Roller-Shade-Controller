@@ -1,9 +1,23 @@
 //Config stuff
 
+//Friendly Name
+#define deviceName "Roller Shade"
+
 //Uncomment to enable wifi manager
 #define wifiManagerEnable
 
-//
+//Enable Blynk (Old Version)
+//#define Blynkenable
+#define rtcBlynk false
+
+//Enable Home Assistant Integration (Displays as a fan)
+//Only Supports the shade and not light control
+#define HAenable
+
+//Home Assistant Config
+#define brokerAddress IPAddress(192,168,254,84)  //MQTT Broker Address
+#define brokerUser "user"                        //Broker Username
+#define brokerPass "password"                    //Broker Password
 
 /* Speed Settings in Steps/Second
  * You will have to play with these values to find a 
@@ -16,9 +30,9 @@
  */
  
 motorSpeedStruct mSpeed = {
-  1000, //Up Speed
+  800, //Up Speed
   1000, //Down Speed
-  175   //Acceleration
+  150   //Acceleration
 };
 
 
@@ -41,10 +55,11 @@ motorSpeedStruct mSpeed = {
 //#include "stepperNema.h"
 
 int connectTimeout = 100;      // How many attempts can we make before giving up on Blynk
-#define blynkRtcInterval = 30; // How often to sync the time. (Would be used for timers)
+//#define blynkRtcInterval = 30; // How often to sync the time. (Would be used for timers)
 
-#include "blynk.h" //Contains Blynk login
-
+#ifdef Blynkenable
+  #include "blynk.h" //Contains Blynk login
+#endif
 
 //------Timer
 int stepperPos[] = {0,6000};
@@ -111,7 +126,6 @@ int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it wil
 
 
 //Extra Stuff
-#define rtcBlynk false
 #define cmds true //After setting up positions, cmdArduino can be disabled
 
 //OTA Settings
