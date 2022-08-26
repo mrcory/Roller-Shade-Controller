@@ -1,18 +1,21 @@
 //Config stuff
 
 //Friendly Name
-#define deviceName "Roller Shade"
+#define deviceName "Roller_Shade"
 
 //Uncomment to enable wifi manager
 #define wifiManagerEnable
 
 //Enable Blynk (Old Version)
-//#define Blynkenable
+#define Blynkenable
 #define rtcBlynk false
 
 //Enable Home Assistant Integration (Displays as a fan)
 //Only Supports the shade and not light control
 #define HAenable
+
+// Unique ID must be set!
+byte mac[] = {0x13, 0x10, 0xFA, 0x6E, 0x38, 0x4A};
 
 //Home Assistant Config
 #define brokerAddress IPAddress(192,168,254,84)  //MQTT Broker Address

@@ -29,6 +29,8 @@ More features, like physical button control, will add a little bit to the cost b
 ### Software
 * Blynk is used as a remote control for this project.
 
+* Home Assistant is supported via [home-assistant-integration](https://github.com/dawidchyrzynski/arduino-home-assistant/blob/main/examples/fan/fan.ino).
+
 * [AccelStepper (Fork)](https://github.com/waspinator/AccelStepper) is used to actually drive the motor. _(This version is available in the library manager.)_
 
 * [CmdArduino](https://github.com/fakufaku/CmdArduino) is used for control of serial monitor. (A little library I really like.)

@@ -1,4 +1,4 @@
-
+bool isOpened = true;
 
 void configSave() {
   //Position 400 is reserved for the blynk token
@@ -178,11 +178,11 @@ void motorControl() {
     if (lastPosition < motorPos) {goDown = true;} else {goDown = false;}
     speedCheck();
     
-    if (motorPos == 1) {stepper.moveTo(shade[0]);}
-    if (motorPos == 2) {stepper.moveTo(shade[1]);}
-    if (motorPos == 3) {stepper.moveTo(shade[2]);}
-    if (motorPos == 4) {stepper.moveTo(shade[3]);}
-    if (motorPos == 5) {stepper.moveTo(shade[4]);}
+    if (motorPos == 1) {stepper.moveTo(shade[0]); isOpened = true;}
+    if (motorPos == 2) {stepper.moveTo(shade[1]); isOpened = false;}
+    if (motorPos == 3) {stepper.moveTo(shade[2]); isOpened = false;}
+    if (motorPos == 4) {stepper.moveTo(shade[3]); isOpened = false;}
+    if (motorPos == 5) {stepper.moveTo(shade[4]); isOpened = false;}
     Serial.println(F("Blynk Move"));
     lastPosition = motorPos; //Before reseting motorPos, save a copy to lastPosition
     motorPos = 0; //Reset motorPos

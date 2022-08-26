@@ -1,7 +1,7 @@
 void setupOTA() {
   ArduinoOTA.onError([](ota_error_t error) { ESP.restart(); });
   ArduinoOTA.setPassword("admin");
-  ArduinoOTA.setHostname("Shade");
+  ArduinoOTA.setHostname(deviceName);
 
 
   ArduinoOTA.onStart([]() {
