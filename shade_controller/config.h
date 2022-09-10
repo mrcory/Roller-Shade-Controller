@@ -2,6 +2,7 @@
 
 //Friendly Name
 #define deviceName "Roller_Shade"
+#define deviceNameLED "Roller_Shade_LED"
 
 //Uncomment to enable wifi manager
 #define wifiManagerEnable
@@ -106,14 +107,14 @@ const int eepromSize = 512;
  *  power consumption and add a safety margin.
  */
 #define alternateFunction false //Enable alternate use of the reset button
-#define lightMode 0             //0-PWM 1-FastLED | PWM is currently not implemented.
+#define lightMode 0             //0-PWM 1-FastLED
 
 /*  Light accessory settings (Not the feedback LED)
  *  Using FastLED to run some WS2812 
  *  The data pin for the WS2812 is set in the main ino 
  *  around line 31
 */
-int ledBrightness = 0;        //Starting brightness
+int ledBrightness = 900;        //Starting brightness
 int ledButtonBrightness = 50; //Brightness to use when using rst button to turn on light.
 int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it will loop to near 0
                               //Can be set in Blynk

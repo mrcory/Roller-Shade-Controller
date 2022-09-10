@@ -17,7 +17,7 @@
 #define BLYNK_PRINT Serial
 
 //Version
-#define softVersion "3.0.0"
+#define softVersion "3.1.0"
 const int configVersion = 4;
 int   safeConfigVersion = 3; //The oldest version of config that can
 //be updated from.
@@ -120,6 +120,7 @@ pwmStruct pwm = {
 
 #ifdef HAenable
 HACover cover(deviceName);
+HASwitch led(deviceNameLED, false);
 
 void onCoverCommand(HACover::CoverCommand _cmd) {
   if (_cmd == HACover::CommandOpen) {
@@ -137,6 +138,14 @@ void onCoverCommand(HACover::CoverCommand _cmd) {
         cover.setState(HACover::StateStopped);
   }
 }
+
+void onStateChangeLED(bool _state, HASwitch* s) {
+  if (lightMode == 0) {
+    pwm.on = _state;
+  }
+}
+
+
 #endif
 
 #if buttonEnable //Enable physical buttons
@@ -293,8 +302,16 @@ void setup() {
   device.setName(deviceName);
   device.setSoftwareVersion(softVersion);
 
+  //Configure LED
+  led.setName(deviceNameLED);
+  led.setIcon("mdi:lightbulb");
+
+  //LED callback setup
+  led.onStateChanged(onStateChangeLED);
+
   cover.onCommand(onCoverCommand);
   mqtt.begin(brokerAddress, brokerUser, brokerPass);
+
 
 /*
   if (lastPosition > 1) { //If down, set state as such.
