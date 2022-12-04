@@ -120,9 +120,10 @@ pwmStruct pwm = {
 
 #ifdef HAenable
 HACover cover(deviceName);
-HASwitch led(deviceNameLED, false);
+HACover cover(deviceName, HACover::PositionFeature);
+HALight led(deviceNameLED, HALight::BrightnessFeature);
 
-void onCoverCommand(HACover::CoverCommand _cmd) {
+void onCoverCommand(HACover::CoverCommand _cmd, HACover* sender) {
   if (_cmd == HACover::CommandOpen) {
     //Serial.println("Command: Open");
     cover.setState(HACover::StateOpen, true);
@@ -139,10 +140,15 @@ void onCoverCommand(HACover::CoverCommand _cmd) {
   }
 }
 
-void onStateChangeLED(bool _state, HASwitch* s) {
+void onStateChangeLED(bool _state, HALight* s) {
   if (lightMode == 0) {
     pwm.on = _state;
   }
+}
+
+void onBrightnessCommand(uint8_t led_brightness, HALight* sender) {
+  pwm.set = led_brightness;
+  sender->setBrightness(led_brightness);
 }
 
 
@@ -307,7 +313,8 @@ void setup() {
   led.setIcon("mdi:lightbulb");
 
   //LED callback setup
-  led.onStateChanged(onStateChangeLED);
+  led.onStateCommand(onStateChangeLED);
+  led.onBrightnessCommand(onBrightnessCommand);
 
   cover.onCommand(onCoverCommand);
   mqtt.begin(brokerAddress, brokerUser, brokerPass);
