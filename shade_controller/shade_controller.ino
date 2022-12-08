@@ -1,4 +1,4 @@
-/*Roller Shade Control
+/*Roller Shade Control <ESP32 D1 Mini Variant>
    Created by: Cory McGahee
    Free for non-commercial use only
 
@@ -17,8 +17,8 @@
 #define BLYNK_PRINT Serial
 
 //Version
-#define softVersion "3.1.0"
-const int configVersion = 4;
+#define softVersion "4.0.0"
+int configVersion = 4;
 int   safeConfigVersion = 3; //The oldest version of config that can
 //be updated from.
 
@@ -32,23 +32,24 @@ long currentDistance = 0;
 
 #include <AccelStepper.h>
 #include <EEPROM.h>
-#include <ESP8266WiFi.h>
-//#ifdef Blynkenable
-#include <BlynkSimpleEsp8266.h>
-//#endif
 #include <Ethernet2.h>
 #include "config.h"
 
+#ifdef Blynkenable
+  #include <BlynkSimpleEsp32.h>
+#endif
+
+
+
 //ArduinoOTA
-#include <ESP8266mDNS.h>
+#include <mDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include "ota.h"
 
 //wifiManager
 #ifdef wifiManagerEnable
-#include <WiFiManager.h>
-#include <ESP8266WebServer.h>
+  #include <WiFiManager.h>
 #endif
 
 #ifdef HAenable
@@ -95,7 +96,7 @@ int motorPos = 0;
 bool goDown = true;
 
 unsigned long ledTimer;
-bool ledFeedback = false;
+bool ledFeedback = true;
 byte ledMode = 0;
 bool pulse = false; //Basic effect
 
@@ -119,7 +120,6 @@ pwmStruct pwm = {
 #include "functions.h"
 
 #ifdef HAenable
-HACover cover(deviceName);
 HACover cover(deviceName, HACover::PositionFeature);
 HALight led(deviceNameLED, HALight::BrightnessFeature);
 
@@ -140,21 +140,26 @@ void onCoverCommand(HACover::CoverCommand _cmd, HACover* sender) {
   }
 }
 
-void onStateChangeLED(bool _state, HALight* s) {
+void onStateChangeLED(bool _state, HALight* sender) {
   if (lightMode == 0) {
     pwm.on = _state;
   }
+
+  sender->setState(_state);
 }
 
-void onBrightnessCommand(uint8_t led_brightness, HALight* sender) {
-  pwm.set = led_brightness;
-  sender->setBrightness(led_brightness);
+void onBrightnessCommand(uint8_t ledBrightness, HALight* sender) {
+  if (lightMode == 0) {
+    pwm.set = ledBrightness;
+  }
+  
+  sender->setBrightness(ledBrightness);
 }
 
 
 #endif
 
-#if buttonEnable //Enable physical buttons
+#ifdef buttonEnable //Enable physical buttons
 
 #include <AnalogButtons.h>
 
@@ -265,7 +270,7 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, LOW);
 
-#if buttonEnable
+#ifdef buttonEnable
   buttons.add(up);
   buttons.add(down);
   buttons.add(rst);
@@ -311,6 +316,7 @@ void setup() {
   //Configure LED
   led.setName(deviceNameLED);
   led.setIcon("mdi:lightbulb");
+  led.setRetain(true);
 
   //LED callback setup
   led.onStateCommand(onStateChangeLED);
@@ -347,7 +353,7 @@ void setup() {
 
 
 
-  Serial.print(F("Loaded | Position S|C : ")); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
+  Serial.print("Loaded | Position S|C : "); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
   if (lightMode == 1) { //Use FastLED if selected
     FastLED.setBrightness(ledBrightness);
   }
@@ -379,7 +385,7 @@ void loop() {
   cmdPoll();
 #endif
 
-#if buttonEnable
+#ifdef buttonEnable
   buttons.check(); //Check for button presses
 #endif
 
@@ -423,7 +429,7 @@ void loop() {
   ArduinoOTA.handle();
 
   if (resetFlag == true) {
-    ESP.reset();
+    ESP.restart();
   }
 
   if (configLoadFlag == true) {

@@ -107,9 +107,9 @@ void ledTurn(int _mode) {
       }
     } else {
       if (connectAttempt < connectTimeout) {
-        Serial.print(F("[BLYNK] Attempting to connect... | Attempt #")); Serial.println(connectAttempt);
+        Serial.print("[BLYNK] Attempting to connect... | Attempt #"); Serial.println(connectAttempt);
         Blynk.connect(3000); //Attempt to connect for 3 seconds.
-        if (Blynk.connected() == true) {Serial.println(F("[BLYNK] Connected!"));}
+        if (Blynk.connected() == true) {Serial.println("[BLYNK] Connected!");}
         connectAttempt++; //Increment timeout timer
       }
     }
@@ -169,7 +169,7 @@ void motorControl() {
     if (savedPosition != stepper.currentPosition()) {
       savedPosition = stepper.currentPosition();
       configSave();
-      Serial.print(F("Position S|C : ")); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
+      Serial.print("Position S|C : "); Serial.print(savedPosition); Serial.print("|"); Serial.println(stepper.currentPosition());
     }
   }
 
@@ -183,7 +183,7 @@ void motorControl() {
     if (motorPos == 3) {stepper.moveTo(shade[2]); isOpened = false;}
     if (motorPos == 4) {stepper.moveTo(shade[3]); isOpened = false;}
     if (motorPos == 5) {stepper.moveTo(shade[4]); isOpened = false;}
-    Serial.println(F("Blynk Move"));
+    Serial.println("Blynk Move");
     lastPosition = motorPos; //Before reseting motorPos, save a copy to lastPosition
     motorPos = 0; //Reset motorPos
   }
@@ -195,7 +195,7 @@ void motorControl() {
   //Function used to control the motor position via Serial
   void manualMove(int arg_cnt, char **args) {
     stepper.moveTo(cmdStr2Num(args[1], 10));
-    Serial.print(F("Manual Move: ")); Serial.println(cmdStr2Num(args[1], 10));
+    Serial.print("Manual Move: "); Serial.println(cmdStr2Num(args[1], 10));
   }
   
   //Set home position via Serial

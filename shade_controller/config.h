@@ -16,7 +16,7 @@
 #define HAenable
 
 // Unique ID must be set!
-byte mac[] = {0x13, 0x10, 0xFA, 0x6E, 0x38, 0x4A};
+byte mac[] = {0x13, 0x10, 0xFA, 0x6E, 0x38, 0x4B};
 
 //Home Assistant Config
 #define brokerAddress IPAddress(192,168,254,84)  //MQTT Broker Address
@@ -75,13 +75,13 @@ int stepperTime[2][2] = {};
  * All that is being stored there is position data
  * after each move is completed.
  */
-const int eepromSize = 512;
+int eepromSize = 512;
 
 
 
 //Button Config
-#define buttonEnable true //True to enable button controls
-#define buttonPin A0      //Analog pin for buttons
+#define buttonEnable     //True to enable button controls
+#define buttonPin 36     //Analog pin for buttons
 
 //AnalogRead values for buttons
 #define upVal 895
@@ -114,8 +114,8 @@ const int eepromSize = 512;
  *  The data pin for the WS2812 is set in the main ino 
  *  around line 31
 */
-int ledBrightness = 900;        //Starting brightness
-int ledButtonBrightness = 50; //Brightness to use when using rst button to turn on light.
+int ledBrightness = 254;        //Starting brightness in percent
+int ledButtonBrightness = 1000; //Brightness to use when using rst button to turn on light.
 int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it will loop to near 0
                               //Can be set in Blynk
 
@@ -130,7 +130,8 @@ int pulseMax = 250;           //Max brightness for pulse mode. Max 250 or it wil
 
 
 //Extra Stuff
-#define cmds true //After setting up positions, cmdArduino can be disabled
+//#define cmds true //After setting up positions, cmdArduino can be disabled
+//Not compatible with ESP32
 
 //OTA Settings
 #define updatePassword "admin"

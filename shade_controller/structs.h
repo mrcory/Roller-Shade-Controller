@@ -13,9 +13,9 @@ struct motorInvertStruct {
 
 //Invert Hold Variable
 motorInvertStruct mInvert = {
-  false,
-  false,
-  false
+  true,
+  true,
+  true
 };
 
 //PWM Struct
